@@ -10,7 +10,6 @@ import com.example.myapp.model.monsters.Monster;
 public class Battle {
 	private Player player;
 	private Monster monster;
-	private ActionInfo info;
 	private List<String> messages;
 	private int playerDamege;
 	private int playerTension;
@@ -18,7 +17,6 @@ public class Battle {
 
 	public Battle() {
 		player = new Player();
-		info = new ActionInfo();
 		messages = new ArrayList<String>();
 	}
 
@@ -31,8 +29,9 @@ public class Battle {
 	}
 
 	public void playerAttack() {
-		player.attack(this);
-		monster.calcDamage(this);
+		ActionInfo info = new ActionInfo();
+		player.attack(this, info);
+		// monster.calcDamage(this);
 
 		// monster.actions(this);
 		// player.turnEnd();
@@ -48,6 +47,12 @@ public class Battle {
 	 * player.setLV(difficulty.getLevel());
 	 * }
 	 */
+	public void monsterTurn() {
+		ActionInfo info = new ActionInfo();
+		monster.actions(this, info);
+
+	}
+
 	public void setPlayerCondition() {
 
 	}

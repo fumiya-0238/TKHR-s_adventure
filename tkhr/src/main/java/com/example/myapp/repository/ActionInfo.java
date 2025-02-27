@@ -1,28 +1,37 @@
 package com.example.myapp.repository;
 
 public class ActionInfo {
+    private boolean attackIs;
     private int damage;
-    private int action;
     private boolean penetrate;
+
+    public ActionInfo(boolean attackIs, int damage, boolean penetrate) {
+        this.attackIs = attackIs;
+        this.damage = damage;
+        this.penetrate = penetrate;
+    }
+
+    public ActionInfo() {
+    }
+
+    public void setAttackIsTrue() {
+        attackIs = true;
+    }
 
     public void setDamage(int damage) {
         this.damage = damage;
-    }
-
-    public void setAction(int action) {
-        this.action = action;
     }
 
     public void setPenetrate(boolean penetrate) {
         this.penetrate = penetrate;
     }
 
-    public int getDamage() {
-        return damage;
+    public boolean getAttackIs() {
+        return attackIs;
     }
 
-    public int getAction() {
-        return action;
+    public int getDamage() {
+        return damage;
     }
 
     public boolean getPenetrate() {

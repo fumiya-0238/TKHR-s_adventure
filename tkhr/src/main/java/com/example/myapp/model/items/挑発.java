@@ -1,16 +1,18 @@
 package com.example.myapp.model.items;
 
-public class 挑発 extends Item{
-//強攻撃を強制
-public 挑発() {
-    super("挑発", 50);
-    setText("HPを10回復します");
-}
+import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.repository.Battle;
 
-@Override
-public String useResult(GameService battle, int i,ItemInterface itemInterface) {
-    // TODO 自動生成されたメソッド・スタブ
-    itemInterface.removeItem(i);
-    return battle.getPlayer().healResult(10);
-}
+public class 挑発 extends Item {
+    // 強攻撃を強制
+    public 挑発() {
+        super("挑発", 50);
+        setText("次のターン強攻撃をさせる");
+    }
+
+    @Override
+    public void use(Battle battle, int i) {
+        // TODO 自動生成されたメソッド・スタブ
+        battle.getMonster().plusCondition(CreateCondition.TAUNT);
+    }
 }

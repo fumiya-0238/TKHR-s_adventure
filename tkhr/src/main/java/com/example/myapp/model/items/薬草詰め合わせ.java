@@ -1,8 +1,7 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.Player;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.model.Player;
+import com.example.myapp.repository.Battle;
 
 public class 薬草詰め合わせ extends Item {
 	public 薬草詰め合わせ() {
@@ -11,12 +10,11 @@ public class 薬草詰め合わせ extends Item {
 	}
 
 	@Override
-	protected String useResult(GameService battle, int i, ItemInterface itemInterface) {
+	protected void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
 		Player player = battle.getPlayer();
-		for (int j = 0, l = player.getMaxItem() - player.getItems().size(); j <= l; j++)
-			battle.setItem(new 薬草());
-		itemInterface.removeItem(i);
-		return "薬草を大量に手に入れた";
+		for (int j = 0, l = player.getMaxItem() - player.getItems().size(); j <= l; j++) {
+			player.setItem(new 薬草());
+		}
 	}
 }

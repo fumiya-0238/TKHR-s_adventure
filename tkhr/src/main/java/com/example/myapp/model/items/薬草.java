@@ -9,8 +9,8 @@ public class 薬草 extends Item {
 	}
 
 	@Override
-	public String useResult(Battle battle, int i) {
+	public void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		return battle.getPlayer().healResult(10);
+		battle.getPlayer().healResult(10);
 	}
 }

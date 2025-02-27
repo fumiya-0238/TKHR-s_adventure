@@ -2,67 +2,74 @@ package com.example.myapp.model.monsters.actions;
 
 import java.util.Objects;
 
-import com.example.myapp.service.GameService;
-import tkhr.Player;
-import tkhr.battleScreen.messagePanel.MessagePanel;
-import tkhr.items.Item;
-import tkhr.items.ダークマター;
-import tkhr.monsters.Monster;
+import com.example.myapp.repository.Battle;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.model.Player;
+import com.example.myapp.model.items.Item;
+import com.example.myapp.model.items.ダークマター;
+import com.example.myapp.model.monsters.Monster;
 
 public enum AttackActionList {
 	INSTANCE();
 
-	private void commonAction(GameService battle, String actionName, int damage,
-			boolean penetrate) {
+	private void commonAction(Battle battle, ActionInfo info, String actionName) {
 		Player player = battle.getPlayer();
-		String text = battle.getMonster().getName() + actionName + "。"
-				+ player.calcDamageResult(damage, penetrate, battle);
+		/*
+		 * String text = battle.getMonster().getName() + actionName + "。"
+		 * + player.calcDamageResult(damage,_ penetrate, battle);
+		 */
 	}
 
-	public void normalAttack(Monster monster) {
+	public void normalAttack(Battle battle, ActionInfo info) {
 		String actionName = "の攻撃";
 		int damage = battle.getMonster().getATK();
-		commonAction(battle, actionName, damage, false);
+		commonAction(battle, info, actionName);
 	}
 
-	public void criticalAttack(GameService battle) {
+	public void criticalAttack(Battle battle, ActionInfo info) {
 		String actionName = "の強攻撃";
 		int damage = (int) (battle.getMonster().getATK() * 1.5);
-		commonAction(battle, messagePanel, actionName, damage, false);
+		commonAction(battle, info, actionName);
 	}
 
-	public void laserAttack(GameService battle) {
+	public void laserAttack(Battle battle, ActionInfo info) {
 		String actionName = "はレーザーを撃ってきた";
 		int damage = (int) (battle.getMonster().getATK() * 1.5);
-		commonAction(battle, messagePanel, actionName, damage, false);
+		commonAction(battle, info, actionName);
 	}
 
-	public void drainAttack(GameService battle) {
+	public void runawayLaserAttack(Battle battle, ActionInfo info) {
+		String actionName = "は暴走レーザーを撃ってきた";
+		int damage = (int) (battle.getMonster().getATK() * 3);
+		commonAction(battle, info, actionName);
+	}
+
+	public void drainAttack(Battle battle, ActionInfo info) {
 		String actionName = "の吸収攻撃";
 		int damage = battle.getMonster().getATK();
-		commonAction(battle, messagePanel, actionName, damage, false);
+		commonAction(battle, info, actionName);
 		if (damage != 0) {
 			battle.getMonster().setHeal(damage / 2);
 		}
 	}
 
-	public void panetrateAttack(GameService battle, MessagePanel messagePanel) {
+	public void panetrateAttack(Battle battle, ActionInfo info) {
 		String actionName = "の貫通攻撃";
 		int damage = battle.getMonster().getATK();
-		commonAction(battle, messagePanel, actionName, damage, true);
+		commonAction(battle, info, actionName);
 	}
 
-	public void panetrateCriticalAttack(GameService battle, MessagePanel messagePanel) {
+	public void panetrateCriticalAttack(Battle battle, ActionInfo info) {
 		String actionName = "の強貫通攻撃";
 		int damage = (int) (battle.getMonster().getATK() * 1.5);
-		commonAction(battle, messagePanel, actionName, damage, true);
+		commonAction(battle, info, actionName);
 	}
 
-	public void pecking(GameService battle, MessagePanel messagePanel) {
+	public void pecking(Battle battle, ActionInfo info) {
 		String actionName = "のついばむ";
 		Monster monster = battle.getMonster();
 		int damage = monster.getATK();
-		commonAction(battle, messagePanel, actionName, damage, false);
+		commonAction(battle, info, actionName);
 		if (damage != 0) {
 			Item item = battle.getPlayer().descSearchItem("草");
 			if (Objects.nonNull(item)) {
@@ -72,27 +79,27 @@ public enum AttackActionList {
 				if (item.getName().equals("アロエ草")) {
 					monster.setHeal(20);
 				} else {
-					monster.calcDamageResult(10, true, battle);
+					monster.calcDamageResult(battle, new ActionInfo(true, 10, true));
 				}
 			}
 		}
 	}
 
-	public void darkMatterSlash(GameService battle, MessagePanel messagePanel) {
+	public void darkMatterSlash(Battle battle, ActionInfo info) {
 		String actionName = "はダークマタースラッシュを放った";
 		int damage = battle.getMonster().getATK();
-		commonAction(battle, messagePanel, actionName, damage, false);
+		commonAction(battle, info, actionName);
 		Player player = battle.getPlayer();
 		if (damage != 0) {
 			for (int j = 0, l = player.getMaxItem() - player.getItems().size(); j <= l; j++)
-				battle.setItem(new ダークマター());
+				battle.getPlayer().setItem(new ダークマター());
 		}
 	}
 
-	public void matterDrain(GameService battle, MessagePanel messagePanel) {
+	public void matterDrain(Battle battle, ActionInfo info) {
 		String actionName = "はマタードレインを使った";
 		int damage = battle.getMonster().getATK();
-		commonAction(battle, messagePanel, actionName, damage, false);
+		commonAction(battle, info, actionName);
 		Player player = battle.getPlayer();
 		if (damage != 0) {
 			battle.getMonster().setHeal(player.countItem("ダークマター"));

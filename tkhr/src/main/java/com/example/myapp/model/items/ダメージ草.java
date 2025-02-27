@@ -1,7 +1,7 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 
 public class ダメージ草 extends Item {
 	public ダメージ草() {
@@ -10,9 +10,8 @@ public class ダメージ草 extends Item {
 	}
 
 	@Override
-	protected String useResult(GameService battle, int i, ItemInterface itemInterface) {
+	protected void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		itemInterface.removeItem(i);
-		return battle.getPlayer().calcDamageResult(10, true, battle);
+		battle.getPlayer().calcDamageResult(battle, new ActionInfo(true, 10, true));
 	}
 }

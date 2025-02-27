@@ -1,7 +1,7 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 
 public class 光の玉 extends Item {
 	public 光の玉() {
@@ -9,11 +9,10 @@ public class 光の玉 extends Item {
 		setText("敵に7ダメージ 強攻撃回数+1");
 	}
 
-		@Override
-		public String useResult(GameService battle, int i,ItemInterface itemInterface) {
-			// TODO 自動生成されたメソッド・スタブ
-			itemInterface.removeItem(i);
-			battle.getPlayer().setCritical(1);
-			return battle.getMonster().calcDamageResult(7,true,battle);
-		}
+	@Override
+	public void use(Battle battle, int i) {
+		// TODO 自動生成されたメソッド・スタブ
+		battle.getPlayer().setCritical(1);
+		battle.getMonster().calcDamageResult(battle, new ActionInfo(true, 7, true));
 	}
+}

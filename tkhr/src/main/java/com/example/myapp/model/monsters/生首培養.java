@@ -1,6 +1,7 @@
 package com.example.myapp.model.monsters;
 
-import com.example.myapp.service.GameService;
+import com.example.myapp.repository.Battle;
+import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.model.conditions.CreateCondition;
 import com.example.myapp.model.monsters.actions.AttackActionList;
 
@@ -15,15 +16,15 @@ public class 生首培養 extends Monster {
 		Turn = 4;
 		this.ID = ID;
 		super.init();
-		plusMonsterCondition(CreateCondition.CONTROL_SWITCH);
+		plusCondition(CreateCondition.CONTROL_SWITCH);
 	}
 
 	@Override
-	public void actions(GameService battle) {
+	public void actions(Battle battle, ActionInfo info) {
 		// TODO 自動生成されたメソッド・スタブ
 		if (Turn == 3 || Turn == 1)
-			AttackActionList.INSTANCE.normalAttack(battle);
+			AttackActionList.INSTANCE.normalAttack(battle, info);
 		else
-			AttackActionList.INSTANCE.laserAttack(battle);
+			AttackActionList.INSTANCE.laserAttack(battle, info);
 	}
 }

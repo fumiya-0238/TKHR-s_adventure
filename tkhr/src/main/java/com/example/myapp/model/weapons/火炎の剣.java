@@ -1,6 +1,7 @@
 package com.example.myapp.model.weapons;
 
-import com.example.myapp.service.GameService;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 import com.example.myapp.model.items.火の玉;
 
 public class 火炎の剣 extends Weapon {
@@ -8,28 +9,33 @@ public class 火炎の剣 extends Weapon {
 		super("火炎の剣", 80, "ターン終了時、火の玉を1個手に入れる", 5);
 	}
 
-	public void attack(GameService battle) {
-		super.attack(battle);
+	@Override
+	public void attack(Battle battle, ActionInfo info) {
+		super.attack(battle, info);
 		battle.getPlayer().setItem(new 火の玉());
 	}
 
-	public void weekAttack(GameService battle) {
-		super.weekAttack(battle);
+	@Override
+	public void weekAttack(Battle battle, ActionInfo info) {
+		super.weekAttack(battle, info);
 		battle.getPlayer().setItem(new 火の玉());
 	}
 
-	public void criticalAttack(GameService battle) {
-		super.criticalAttack(battle);
+	@Override
+	public void criticalAttack(Battle battle, ActionInfo info) {
+		super.criticalAttack(battle, info);
 		battle.getPlayer().setItem(new 火の玉());
 	}
 
-	public void defence(GameService battle) {
-		super.defence(battle);
+	@Override
+	public void defence(Battle battle, ActionInfo info) {
+		super.defence(battle, info);
 		battle.getPlayer().setItem(new 火の玉());
 	}
 
-	public void tension(GameService battle) {
-		super.tension(battle);
+	@Override
+	public void tension(Battle battle, ActionInfo info) {
+		super.tension(battle, info);
 		battle.getPlayer().setItem(new 火の玉());
 	}
 }

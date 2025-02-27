@@ -1,6 +1,8 @@
 package com.example.myapp.model.weapons;
 
-import tkhr.Battle;
+import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 
 public class 入魂剣 extends Weapon {
 	public 入魂剣() {
@@ -8,8 +10,8 @@ public class 入魂剣 extends Weapon {
 	}
 
 	@Override
-	public void criticalAttack(GameService battle) {
-		super.criticalAttack(battle);
-		battle.getPlayer().plusPlayerCondition("根性状態");
+	public void criticalAttack(Battle battle, ActionInfo info) {
+		super.criticalAttack(battle, info);
+		battle.getPlayer().plusCondition(CreateCondition.GUTS);
 	}
 }

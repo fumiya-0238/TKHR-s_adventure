@@ -1,18 +1,19 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.repository.Battle;
 
-public class ゴールドチャレンジ extends SystemItem{
-	
+public class ゴールドチャレンジ extends Item {
+
 	public ゴールドチャレンジ() {
 		super("ゴールドチャレンジ", 50);
 		setText("この与えたダメージ分のゴールドがモンスターのゴールドに追加される");
 	}
+
 	@Override
-	protected String useResult(GameService battle, int i, ItemInterface itemInterface) {
+	protected void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		return "";
+		battle.getMonster().plusCondition(CreateCondition.GOLDCHANCE);
 	}
 
 }

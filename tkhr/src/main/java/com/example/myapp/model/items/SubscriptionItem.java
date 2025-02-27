@@ -1,6 +1,7 @@
 package com.example.myapp.model.items;
 
-import com.example.myapp.service.GameService;
+import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.repository.Battle;
 
 public abstract class SubscriptionItem extends Item {
 	private boolean active;
@@ -9,11 +10,11 @@ public abstract class SubscriptionItem extends Item {
 		super(name, price);
 	}
 
-	protected void registration(GameService battle, int i) {
+	protected void registration(Battle battle, int i, CreateCondition condition) {
 		if (active) {
-			battle.removeSubscriptionItem(subscriptionItem);
+			battle.getPlayer().plusCondition(condition);
 		} else {
-			battle.addSubscriptionItem(subscriptionItem);
+			battle.getPlayer().plusCondition(condition);
 			active = true;
 		}
 	}

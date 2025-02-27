@@ -1,6 +1,7 @@
 package com.example.myapp.model.monsters;
 
-import com.example.myapp.service.GameService;
+import com.example.myapp.repository.Battle;
+import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.model.monsters.actions.AttackActionList;
 
 public class とんびくん extends Monster {
@@ -16,10 +17,10 @@ public class とんびくん extends Monster {
 	}
 
 	@Override
-	public void actions(GameService battle) {
+	public void actions(Battle battle, ActionInfo info) {
 		if (HP % 3 == 0)
-			AttackActionList.INSTANCE.pecking(battle);
+			AttackActionList.INSTANCE.pecking(battle, info);
 		else
-			AttackActionList.INSTANCE.panetrateAttack(battle);
+			AttackActionList.INSTANCE.panetrateAttack(battle, info);
 	}
 }

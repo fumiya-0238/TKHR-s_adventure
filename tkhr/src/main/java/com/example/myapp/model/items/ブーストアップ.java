@@ -4,13 +4,13 @@ import com.example.myapp.repository.Battle;
 
 public class ブーストアップ extends Item {
     public ブーストアップ() {
-        super("薬草", 10);
+        super("ブーストアップ", 10);
         setText("HPを10回復します");
     }
 
     @Override
-    public String useResult(Battle battle, int i) {
+    public void use(Battle battle, int i) {
         // TODO 自動生成されたメソッド・スタブ
-        return battle.getPlayer().healResult(10);
+        // battle.getPlayer().healResult(10);
     }
 }

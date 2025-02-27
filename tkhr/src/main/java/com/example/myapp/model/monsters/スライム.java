@@ -1,6 +1,7 @@
 package com.example.myapp.model.monsters;
 
-import com.example.myapp.service.GameService;
+import com.example.myapp.repository.Battle;
+import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.model.monsters.actions.AttackActionList;
 
 public class スライム extends Monster {
@@ -17,8 +18,8 @@ public class スライム extends Monster {
 	}
 
 	@Override
-	public void actions(GameService battle) {
-		AttackActionList.INSTANCE.normalAttack(battle);
+	public void actions(Battle battle, ActionInfo info) {
+		AttackActionList.INSTANCE.normalAttack(battle, info);
 	}
 
 }

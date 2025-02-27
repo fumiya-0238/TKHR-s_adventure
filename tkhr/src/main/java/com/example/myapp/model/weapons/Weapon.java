@@ -20,39 +20,46 @@ public abstract class Weapon extends Item {
 		return ATK;
 	}
 
-	public void attack(Battle battle) {
-		battle.getInfo().setDamage(battle.getPlayer().getATK());
+	public void attack(Battle battle, ActionInfo info) {
+		Player player = battle.getPlayer();
+		info.setAttackIsTrue();
+		info.setDamage(player.getATK());
+		info.setPenetrate(player.amountCondition(CreateCondition.PENETRATE) > 0);
 	}
 
-	public void weekAttack(Battle battle) {
+	public void weekAttack(Battle battle, ActionInfo info) {
 		Player player = battle.getPlayer();
-		int damage = player.getATK() - 1;
-		battle.getMonster().calcDamageResult(damage,
-				(player.amountCondition(CreateCondition.PENETRATE) > 0), battle);
+		info.setAttackIsTrue();
+		info.setDamage(player.getATK() - 1);
+		info.setPenetrate(player.amountCondition(CreateCondition.PENETRATE) > 0);
 	}
 
-	public void criticalAttack(GameService battle) {
+	public void criticalAttack(Battle battle, ActionInfo info) {
 		Player player = battle.getPlayer();
-		int damage = (int) (player.getATK() * 1.5);
 		player.setCritical(-1);
-		battle.getMonster().calcDamageResult(damage,
-				(player.amountCondition(CreateCondition.PENETRATE) > 0), battle);
+		info.setAttackIsTrue();
+		info.setDamage((int) (player.getATK() * 1.5));
+		info.setPenetrate(player.amountCondition(CreateCondition.PENETRATE) > 0);
 	}
 
-	public void defence(GameService battle) {
+	public void defence(Battle battle, ActionInfo info) {
 		Player player = battle.getPlayer();
 		int a = player.getMAXHP() / 10;
 		int b = player.amountCondition(CreateCondition.DEFENCE_BUFF);
 		player.healResult(a * (int) (Math.pow(2, b)));
 	}
 
-	public void tension(GameService battle) {
+	public void tension(Battle battle, ActionInfo info) {
 		battle.getPlayer().setTension(25);
 	}
 
 	@Override
-	protected String useResult(GameService battle, int i) {
+	protected void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		return battle.getMonster().calcDamageResult(ATK, true, battle);
+		ActionInfo info = new ActionInfo();
+		info.setAttackIsTrue();
+		info.setDamage(ATK);
+		info.setPenetrate(true);
+		battle.getMonster().calcDamageResult(battle, info);
 	}
 }

@@ -1,8 +1,7 @@
 package com.example.myapp.model.weapons;
 
-import com.example.myapp.service.GameService;
-import com.example.myapp.model.Player;
-import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 
 public class ディレイソード extends Weapon {
 	private int delay;
@@ -11,31 +10,35 @@ public class ディレイソード extends Weapon {
 		super("ディレイソード", 70, "攻撃しても相手のHPが減らずにダメージが蓄積される。防御をすると、それまで蓄積されていた分のダメージを与える。", 12);
 	}
 
-	public void attack(GameService battle) {
-		Player player = battle.getPlayer();
-		int damage = player.getATK();
-		delay += battle.getMonster().simulateDamage(damage, (player.amountCondition(CreateCondition.PENETRATE) > 0),
-				battle);
+	private void setDelay(Battle battle, ActionInfo info) {
+		delay += battle.getMonster().simulateDamage(battle, info);
+		info.setDamage(0);
 	}
 
-	public void weekAttack(GameService battle) {
-		Player player = battle.getPlayer();
-		int damage = player.getATK() - 1;
-		delay += battle.getMonster().simulateDamage(damage, (player.amountCondition(CreateCondition.PENETRATE) > 0),
-				battle);
+	@Override
+	public void attack(Battle battle, ActionInfo info) {
+		super.attack(battle, info);
+		setDelay(battle, info);
 	}
 
-	public void criticalAttack(GameService battle) {
-		Player player = battle.getPlayer();
-		int damage = (int) (player.getATK() * 1.5);
-		player.setCritical(-1);
-		delay += battle.getMonster().simulateDamage(damage, (player.amountCondition(CreateCondition.PENETRATE) > 0),
-				battle);
+	@Override
+	public void weekAttack(Battle battle, ActionInfo info) {
+		super.weekAttack(battle, info);
+		setDelay(battle, info);
 	}
 
-	public void defence(GameService battle) {
-		super.defence(battle);
-		battle.getMonster().calcDamageResult(delay, true, battle);
+	@Override
+	public void criticalAttack(Battle battle, ActionInfo info) {
+		super.criticalAttack(battle, info);
+		setDelay(battle, info);
+	}
+
+	@Override
+	public void defence(Battle battle, ActionInfo info) {
+		super.defence(battle, info);
+		info.setAttackIsTrue();
+		info.setDamage(delay);
+		info.setPenetrate(true);
 		delay = 0;
 	}
 }

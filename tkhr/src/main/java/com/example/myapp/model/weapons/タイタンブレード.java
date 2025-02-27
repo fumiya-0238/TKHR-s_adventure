@@ -1,8 +1,7 @@
 package com.example.myapp.model.weapons;
 
-import com.example.myapp.service.GameService;
-import com.example.myapp.model.Player;
-import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 
 public class タイタンブレード extends Weapon {
 	public タイタンブレード() {
@@ -10,11 +9,8 @@ public class タイタンブレード extends Weapon {
 	}
 
 	@Override
-	public void criticalAttack(GameService battle) {
-		Player player = battle.getPlayer();
-		int damage = (int) (player.getATK() * 1.5);
-		player.setCritical(-1);
-		battle.getMonster().calcDamageResult(damage, (player.amountCondition(CreateCondition.PENETRATE) > 0), battle);
-		super.defence(battle);
+	public void criticalAttack(Battle battle, ActionInfo info) {
+		super.defence(battle, info);
+		super.criticalAttack(battle, info);
 	}
 }

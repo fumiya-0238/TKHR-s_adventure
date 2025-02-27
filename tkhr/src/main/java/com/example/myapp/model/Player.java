@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.example.myapp.model.difficulty.Difficulty;
 import com.example.myapp.model.items.Item;
 import com.example.myapp.model.weapons.Weapon;
 import com.example.myapp.model.weapons.素手;
@@ -30,8 +29,8 @@ public class Player extends Living {
 		resetStatus();
 	}
 
-	public void attack(Battle battle) {
-		weapon.attack(battle);
+	public void attack(Battle battle, ActionInfo info) {
+		weapon.attack(battle, info);
 	}
 
 	public void resetStatus() {
@@ -56,8 +55,9 @@ public class Player extends Living {
 		return maxItem;
 	}
 
-	public String calcDamageResult(int damage, boolean penetrate, GameService battle) {
-		if (action == 4 && !penetrate) {
+	public String calcDamageResult(Battle battle, ActionInfo info) {
+		int damage = info.getDamage();
+		if (action == 4 && !info.getPenetrate()) {
 			damage = 0;
 		}
 		String text = damage + "を受けた。";
@@ -169,7 +169,7 @@ public class Player extends Living {
 		}
 		return null;
 	}
-
+	
 	public int countItem(String name) {
 		int n = 0;
 		for (int i = 0, l = items.size(); i < l; i++) {

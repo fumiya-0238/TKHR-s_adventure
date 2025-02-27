@@ -1,18 +1,16 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.repository.Battle;
 
 public class 気合ため extends Item {
 	public 気合ため() {
 		super("気合ため", 12);
-		setText("空いてる持ち物欄を薬草で埋めます");
+		setText("気合を25%上げます");
 	}
 
 	@Override
-	public String useResult(GameService battle, int i,ItemInterface itemInterface) {
+	public void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		itemInterface.removeItem(i);
-		return battle.getPlayer().setTension(25);
+		battle.getPlayer().setTension(25);
 	}
 }

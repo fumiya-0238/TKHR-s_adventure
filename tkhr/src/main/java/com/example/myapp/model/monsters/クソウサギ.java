@@ -1,8 +1,9 @@
 package com.example.myapp.model.monsters;
 
-import com.example.myapp.service.GameService;
-import com.example.myapp.model.monsters.actions.AttackActionList;
+import com.example.myapp.repository.Battle;
+import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.model.monsters.actions.AttackActionList;
 
 public class クソウサギ extends Monster {
 	public クソウサギ(int ID) {
@@ -15,12 +16,12 @@ public class クソウサギ extends Monster {
 		Turn = 4;
 		this.ID = ID;
 		super.init();
-		plusMonsterCondition(CreateCondition.TENACITY);
+		plusCondition(CreateCondition.TENACITY);
 
 	}
 
 	@Override
-	public void actions(GameService battle) {
-		AttackActionList.INSTANCE.normalAttack(battle);
+	public void actions(Battle battle, ActionInfo info) {
+		AttackActionList.INSTANCE.normalAttack(battle, info);
 	}
 }

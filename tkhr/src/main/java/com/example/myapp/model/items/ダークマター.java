@@ -1,20 +1,17 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
-import tkhr.battleScreen.messagePanel.MessagePanel;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 
 public class ダークマター extends Item {
 	public ダークマター() {
 		super("ダークマター", 10);
-		setText("20ダメージ受ける");
+		setText("20ダメージ受けます");
 	}
 
 	@Override
-	public void use(GameService battle, int i, MessagePanel message, ItemInterface itemInterface) {
+	public void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		message.noWaitMessage(getName() + "を使った！");
-		battle.getPlayer().calcDamage(20,true);
-		itemInterface.removeItem(i);
+		battle.getMonster().calcDamageResult(battle, new ActionInfo(true, 20, true));
 	}
 }

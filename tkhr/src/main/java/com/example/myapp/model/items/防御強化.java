@@ -1,19 +1,17 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.repository.Battle;
 
-public class 防御強化 extends SystemItem {
+public class 防御強化 extends Item {
 	public 防御強化() {
 		super("防御強化", 20);
 		setText("このターン防御したときの回復量が2倍になります(重ねがけ可)");
 	}
 
 	@Override
-	protected String useResult(GameService battle, int i, ItemInterface itemInterface) {
+	protected void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		super.registration(battle, i, itemInterface);
-		lastTurn = 1;
-		return "";
+		battle.getPlayer().plusCondition(CreateCondition.DEFENCE_BUFF);
 	}
 }

@@ -1,23 +1,17 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.BattleInterface;
-import tkhr.battleScreen.itemPanel.ItemInterface;
-import tkhr.battleScreen.messagePanel.MessagePanel;
+import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.repository.Battle;
 
-public class バーサーク extends Item{
+public class バーサーク extends Item {
 	public バーサーク() {
-		super("バーサーク",20);
+		super("バーサーク", 20);
 		setText("HPを10回復します");
-		unique=true;
+		unique = true;
 	}
-	public void use(GameService battle,BattleInterface bi){
-		//battle.getPlayer().setHP(10);
-		bi.noWaitMessage(getName()+"を使った！");
-	}
+
 	@Override
-	public void use(GameService battle, int i, MessagePanel message, ItemInterface iface) {
-		// TODO 自動生成されたメソッド・スタブ
-		
+	public void use(Battle battle, int i) {
+		battle.getPlayer().plusCondition(CreateCondition.BERSERK);
 	}
 }

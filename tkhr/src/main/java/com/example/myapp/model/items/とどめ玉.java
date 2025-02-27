@@ -1,7 +1,7 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 
 public class とどめ玉 extends Item {
 	public とどめ玉() {
@@ -10,12 +10,12 @@ public class とどめ玉 extends Item {
 	}
 
 	@Override
-	public String useResult(GameService battle, int i, ItemInterface itemInterface) {
+	public void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
 		int over = battle.getMonster().getOverHP();
 		if (over <= 3)
-			return battle.getMonster().calcDamageResult(over, true, battle);
+			battle.getMonster().calcDamageResult(battle, new ActionInfo(true, over, true));
 		else
-			return battle.getMonster().calcDamageResult(5, true, battle);
+			battle.getMonster().calcDamageResult(battle, new ActionInfo(true, 5, true));
 	}
 }

@@ -21,8 +21,10 @@ public abstract class Living {
 				condition.plusAmount();
 				return;
 			}
-		}
-		conditions.add(c.getCondition());
+		} //// 修正する
+		Condition condition = c.getCondition();
+		condition.newCondition();
+		conditions.add(condition);
 	}
 
 	public int amountCondition(CreateCondition c) {
@@ -32,6 +34,15 @@ public abstract class Living {
 			}
 		}
 		return 0;
+	}
+
+	public void removeCondition(CreateCondition c) {
+		for (int i = 0, l = conditions.size(); i < l; i++) {
+			if (conditions.get(i).getCondition() == c) {
+				conditions.remove(i);
+				return;
+			}
+		}
 	}
 
 	public int getHP() {

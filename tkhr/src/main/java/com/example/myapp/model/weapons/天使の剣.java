@@ -1,39 +1,45 @@
 package com.example.myapp.model.weapons;
 
-import tkhr.Battle;
-import tkhr.Player;
+import com.example.myapp.model.Player;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 
 public class 天使の剣 extends Weapon {
 	public 天使の剣() {
 		super("天使の剣", 60, "ターン終了時、自分のHPが10%回復", 3);
 	}
 
-	public void attack(GameService battle) {
-		super.attack(battle);
+	@Override
+	public void attack(Battle battle, ActionInfo info) {
+		super.attack(battle, info);
 		Player player = battle.getPlayer();
 		player.healResult(player.getMAXHP() / 10);
 	}
 
-	public void weekAttack(GameService battle) {
-		super.weekAttack(battle);
+	@Override
+	public void weekAttack(Battle battle, ActionInfo info) {
+		super.weekAttack(battle, info);
 		Player player = battle.getPlayer();
 		player.healResult(player.getMAXHP() / 10);
 	}
 
-	public void criticalAttack(GameService battle) {
-		super.criticalAttack(battle);
+	@Override
+	public void criticalAttack(Battle battle, ActionInfo info) {
+		super.criticalAttack(battle, info);
 		Player player = battle.getPlayer();
 		player.healResult(player.getMAXHP() / 10);
 	}
 
-	public void defence(GameService battle) {
-		super.defence(battle);
+	@Override
+	public void defence(Battle battle, ActionInfo info) {
+		super.defence(battle, info);
 		Player player = battle.getPlayer();
 		player.healResult(player.getMAXHP() / 10);
 	}
 
-	public void tension(GameService battle) {
-		super.tension(battle);
+	@Override
+	public void tension(Battle battle, ActionInfo info) {
+		super.tension(battle, info);
 		Player player = battle.getPlayer();
 		player.healResult(player.getMAXHP() / 10);
 	}

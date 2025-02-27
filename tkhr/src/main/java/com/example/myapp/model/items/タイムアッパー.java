@@ -1,19 +1,16 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.repository.Battle;
 
 public class タイムアッパー extends Item {
 	public タイムアッパー() {
 		super("タイムアッパー", 10);
-		setText("HPを10回復します");
+		setText("ボーナスターンを1増やします");
 	}
 
 	@Override
-	public String useResult(GameService battle, int i,ItemInterface itemInterface) {
+	public void use(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		itemInterface.removeItem(i);
 		battle.getMonster().setTurn(1);
-		return "";
 	}
 }

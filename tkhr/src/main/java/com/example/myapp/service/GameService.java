@@ -63,6 +63,14 @@ public class GameService {
 	public void PlayerTension() {
 	}
 
+	public void monsterTurn() {
+
+	}
+
+	public void returnTitle() {
+
+	}
+
 	/*
 	 * public void end() {
 	 * 
@@ -91,7 +99,7 @@ public class GameService {
 		return column.toString();
 	}
 
-	public void makePlayerJSON(StringBuilder column) {
+	private void makePlayerJSON(StringBuilder column) {
 		Player player = battle.getPlayer();
 		column.append("\"Player\":{");
 		column.append("\"LV\":\"" + player.getLV() + "\",");
@@ -108,7 +116,7 @@ public class GameService {
 
 	}
 
-	public void makeWeaponJSON(StringBuilder column) {
+	private void makeWeaponJSON(StringBuilder column) {
 		Weapon weapon = battle.getPlayer().getWeapon();
 		column.append("\"Weapon\":{");
 		column.append("\"Name\":\"" + weapon.getName() + "\",");
@@ -117,7 +125,7 @@ public class GameService {
 		column.append("},");
 	}
 
-	public void makeItemsJSON(StringBuilder column) {
+	private void makeItemsJSON(StringBuilder column) {
 		List<Item> items = battle.getPlayer().getItems();
 		column.append("\"Items\":[");
 		for (int i = 0, l = items.size(); i < l; i++) {
@@ -132,7 +140,7 @@ public class GameService {
 		column.append("]");
 	}
 
-	public void makeMonsterJSON(StringBuilder column) {
+	private void makeMonsterJSON(StringBuilder column) {
 		Monster monster = battle.getMonster();
 		column.append("\"Monster\":{");
 		column.append("\"Name\":\"" + monster.getName() + "\",");

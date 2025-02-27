@@ -9,6 +9,7 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /app/target/tkhr-0.0.1-SNAPSHOT.jar app.jar
+RUN java -version || echo "Java not found in PATH"
 EXPOSE 8080
 ENV PORT=8080
 ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT}"]

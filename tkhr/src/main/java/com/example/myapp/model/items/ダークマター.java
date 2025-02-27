@@ -11,7 +11,7 @@ public class ダークマター extends Item {
 	}
 
 	@Override
-	public void use(Battle battle, int i, MessagePanel message, ItemInterface itemInterface) {
+	public void use(GameService battle, int i, MessagePanel message, ItemInterface itemInterface) {
 		// TODO 自動生成されたメソッド・スタブ
 		message.noWaitMessage(getName() + "を使った！");
 		battle.getPlayer().calcDamage(20,true);

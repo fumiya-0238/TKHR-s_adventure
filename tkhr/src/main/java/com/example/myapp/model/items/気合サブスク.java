@@ -11,26 +11,26 @@ public class 気合サブスク extends SubscriptionItem implements ItemObserver
 	}
 
 	@Override
-	public void turnStart(Battle battle) {
+	public void turnStart(GameService battle) {
 		// TODO 自動生成されたメソッド・スタブ
 
 	}
 
 	@Override
-	public void turnEnd(Battle battle) {
+	public void turnEnd(GameService battle) {
 		// TODO 自動生成されたメソッド・スタブ
 
 	}
 
 	@Override
-	public void use(Battle battle, int i, MessagePanel message, ItemInterface iface) {
+	public void use(GameService battle, int i, MessagePanel message, ItemInterface iface) {
 		// TODO 自動生成されたメソッド・スタブ
 		super.use(battle, i, iface, this);
 		message.noWaitMessage(getName() + "を使った！");
 	}
 
 	@Override
-	protected String useResult(Battle battle, int i, ItemInterface itemInterface) {
+	protected String useResult(GameService battle, int i, ItemInterface itemInterface) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}

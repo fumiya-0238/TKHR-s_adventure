@@ -10,7 +10,7 @@ public class タイムアッパー extends Item {
 	}
 
 	@Override
-	public String useResult(Battle battle, int i,ItemInterface itemInterface) {
+	public String useResult(GameService battle, int i,ItemInterface itemInterface) {
 		// TODO 自動生成されたメソッド・スタブ
 		itemInterface.removeItem(i);
 		battle.getMonster().setTurn(1);

@@ -11,12 +11,12 @@ public class バーサーク extends Item{
 		setText("HPを10回復します");
 		unique=true;
 	}
-	public void use(Battle battle,BattleInterface bi){
+	public void use(GameService battle,BattleInterface bi){
 		//battle.getPlayer().setHP(10);
 		bi.noWaitMessage(getName()+"を使った！");
 	}
 	@Override
-	public void use(Battle battle, int i, MessagePanel message, ItemInterface iface) {
+	public void use(GameService battle, int i, MessagePanel message, ItemInterface iface) {
 		// TODO 自動生成されたメソッド・スタブ
 		
 	}

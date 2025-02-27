@@ -1,7 +1,6 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.repository.Battle;
 
 public class 薬草 extends Item {
 	public 薬草() {
@@ -10,9 +9,8 @@ public class 薬草 extends Item {
 	}
 
 	@Override
-	public String useResult(Battle battle, int i,ItemInterface itemInterface) {
+	public String useResult(Battle battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		itemInterface.removeItem(i);
 		return battle.getPlayer().healResult(10);
 	}
 }

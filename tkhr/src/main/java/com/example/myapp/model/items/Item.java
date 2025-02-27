@@ -1,12 +1,11 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.repository.Battle;
 
 public abstract class Item {
-	private String name;
+	protected String name;
 	private int price;
-	private String text;
+	protected String text;
 	protected boolean unique;
 
 	public Item(String name, int price) {
@@ -14,12 +13,12 @@ public abstract class Item {
 		this.price = price;
 	}
 
-	protected abstract String useResult(Battle battle, int i, ItemInterface itemInterface);
+	protected abstract String useResult(Battle battle, int i);
 
-	public String commonUse(Battle battle, int i, ItemInterface itemInterface) {
+	public String commonUse(Battle battle, int i) {
 		StringBuilder sb = new StringBuilder(name);
 		sb.append("を使った。");
-		sb.append(useResult(battle, i, itemInterface));
+		sb.append(useResult(battle, i));
 		return sb.toString();
 	}
 
@@ -38,4 +37,5 @@ public abstract class Item {
 	public void setText(String text) {
 		this.text = text;
 	}
+
 }

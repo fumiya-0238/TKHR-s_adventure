@@ -11,7 +11,7 @@ public class 強チャージ extends Item{
 
 
 	@Override
-	protected String useResult(Battle battle, int i, ItemInterface itemInterface) {
+	protected String useResult(GameService battle, int i, ItemInterface itemInterface) {
 		// TODO 自動生成されたメソッド・スタブ
 		battle.getPlayer().setCritical(1);
 		itemInterface.removeItem(i);

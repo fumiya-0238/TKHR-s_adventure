@@ -1,7 +1,6 @@
-package tkhr.items;
+package com.example.myapp.model.items;
 
-import tkhr.Battle;
-import tkhr.battleScreen.itemPanel.ItemInterface;
+import com.example.myapp.service.GameService;
 
 public abstract class SubscriptionItem extends Item {
 	private boolean active;
@@ -10,13 +9,11 @@ public abstract class SubscriptionItem extends Item {
 		super(name, price);
 	}
 
-	protected void registration(Battle battle, int i, ItemInterface itemInterface) {
+	protected void registration(GameService battle, int i) {
 		if (active) {
 			battle.removeSubscriptionItem(subscriptionItem);
-			itemInterface.removeItem(i);
 		} else {
 			battle.addSubscriptionItem(subscriptionItem);
-			itemInterface.activeSub(i);
 			active = true;
 		}
 	}

@@ -10,7 +10,7 @@ public class 防御強化 extends SystemItem {
 	}
 
 	@Override
-	protected String useResult(Battle battle, int i, ItemInterface itemInterface) {
+	protected String useResult(GameService battle, int i, ItemInterface itemInterface) {
 		// TODO 自動生成されたメソッド・スタブ
 		super.registration(battle, i, itemInterface);
 		lastTurn = 1;

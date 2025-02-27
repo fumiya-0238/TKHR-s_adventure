@@ -10,7 +10,7 @@ public class 上級火の玉 extends Item {
 	}
 
 	@Override
-	public String useResult(Battle battle, int i,ItemInterface itemInterface) {
+	public String useResult(GameService battle, int i,ItemInterface itemInterface) {
 		// TODO 自動生成されたメソッド・スタブ
 		itemInterface.removeItem(i);
 		return battle.getMonster().calcDamageResult(8,true,battle);

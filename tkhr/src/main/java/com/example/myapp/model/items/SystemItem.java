@@ -18,7 +18,7 @@ public abstract class SystemItem extends Item {
 		lastTurn += turn;
 	}
 
-	protected void registration(Battle battle, int i, ItemInterface itemInterface) {
+	protected void registration(GameService battle, int i, ItemInterface itemInterface) {
 		battle.addSystemItem(this);
 		itemInterface.removeItem(i);
 	}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>TKHRの冒険</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" type="text/css" th:href="@{/main.css}" />
+</head>
+
+<body>
+  <h1>ハリボテ</h1>
+  <img class="image" id="title" th:src="@{/images/Title.png}">
+
+  <div id="titlebutton">
+    <!--初級ボタン-->
+    <input type="image" class="difficulty_button image" id="beginner" th:src="${beginner_Button}">
+    <!--中級ボタン-->
+    <input type="image" class="difficulty_button image" id="novice" th:src="${novice_Button}">
+    <!--上級ボタン-->
+    <input type="image" class="difficulty_button image" id="expert" th:src="${expert_Button}">
+  </div>
+  <img class="image" id="battle" th:src="@{/images/Battle.png}">
+
+  <img class="image" id="monster" th:src="${monster_Image}">
+  <div class="text player_status" id="LV"></div>
+  <div class="text player_status" id="HP"></div>
+  <div class="text player_status" id="ATK"></div>
+  <div class="text player_status" id="weapon"></div>
+  <div class="text player_status" id="tension"></div>
+  <div class="text player_status" id="EXP"></div>
+  <div class="text player_status" id="Gold"></div>
+  <ul class="text" id="itemList"></ul>
+  <div id="commandbutton">
+    <div class="text commands" id="attack">攻撃</div>
+    <div class="text commands" id="weekAttack">手加減</div>
+    <div class="text commands" id="criticalAttack"></div>
+    <div class="text commands" id="defence">防御</div>
+    <div class="text commands" id="tameru">ためる</div>
+    <!--<div class="text commands" id="boost">ブースト</div> -->
+  </div>
+
+  <div class="text monster_status" id="monsterHP"></div>
+  <div class="text monster_status" id="overHP"></div>
+  <div class="text monster_status" id="monsterATK"></div>
+  <div class="text monster_status" id="monsterEXP"></div>
+  <div class="text monster_status" id="monsterGold"></div>
+  <div class="text monster_status" id="monsterTurn"></div>
+  <!--
+        window.confirm("これが確認ダイアログです。");
+ -->
+  <script th:src="@{/js/setting.js}"></script>
+  <script th:src="@{/js/startbattle.js}"></script>
+</body>
+
+</html>

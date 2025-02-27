@@ -1,0 +1,92 @@
+* {
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-touch-callout: none;
+    -moz-user-select: none;
+    user-select: none;
+
+}
+
+#title {
+    position: relative;
+}
+
+#battle {
+    position: absolute;
+    visibility: hidden;
+}
+
+.difficulty_button {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    object-fit: none;
+}
+
+.difficulty_button:hover {
+    filter: brightness(70%);
+    transition: all 0.1s ease;
+}
+
+#monster {
+    visibility: hidden;
+    position: absolute;
+    width: 205px;
+    height: 205px;
+    object-fit: none;
+}
+
+.text {
+    line-height: 1;
+    position: absolute;
+    font-family: 'MPゴシック';
+    /* フォントの種類 */
+    font-weight: bold;
+    /* 太字 */
+}
+
+.player_status {
+    visibility: hidden;
+    font-size: 23px;
+    /* 文字サイズ */
+    color: white;
+    /* 文字色 */
+}
+
+.commands {
+    visibility: hidden;
+    font-size: 23px;
+    /* 文字サイズ */
+    color: white;
+    /* 文字色 */
+}
+
+#attack,
+#weekAttack,
+#defence,
+#tameru {
+    width: 69px;
+}
+
+#acriticalAttack {
+    width: 120px;
+}
+
+.monsterStatus {
+    visibility: hidden;
+    font-size: 19px;
+}
+
+#monsterHP,
+#monsterATK,
+#monsterEXP,
+#monsterGold {
+    color: white;
+}
+
+#overHP,
+#monsterTurn {
+    color: #ff7f27;
+    /* 255,127,39 */
+}

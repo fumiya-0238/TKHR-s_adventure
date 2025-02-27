@@ -1,7 +1,8 @@
-package tkhr.weapons;
+package com.example.myapp.model.weapons;
 
-import tkhr.Battle;
-import tkhr.Player;
+import com.example.myapp.service.GameService;
+import com.example.myapp.model.Player;
+import com.example.myapp.model.conditions.CreateCondition;
 
 public class 強強剣 extends Weapon {
 	public 強強剣() {
@@ -9,10 +10,10 @@ public class 強強剣 extends Weapon {
 	}
 
 	@Override
-	public void criticalAttack(Battle battle) {
+	public void criticalAttack(GameService battle) {
 		Player player = battle.getPlayer();
 		int damage = player.getATK() * 2;
 		player.setCritical(-1);
-		battle.getMonster().calcDamageResult(damage, (player.amountPlayerCondition("研ぎ石状態") > 0), battle);
+		battle.getMonster().calcDamageResult(damage, (player.amountCondition(CreateCondition.PENETRATE) > 0), battle);
 	}
 }

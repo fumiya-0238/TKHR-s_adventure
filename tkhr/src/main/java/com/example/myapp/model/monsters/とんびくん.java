@@ -1,26 +1,25 @@
-package tkhr.monsters;
+package com.example.myapp.model.monsters;
 
-import tkhr.Battle;
-import tkhr.battleScreen.BattleInterface;
-import tkhr.monsters.actions.ついばむ;
-import tkhr.monsters.actions.通常攻撃;
+import com.example.myapp.service.GameService;
+import com.example.myapp.model.monsters.actions.AttackActionList;
 
-public class とんびくん extends Monster implements 通常攻撃,ついばむ{
+public class とんびくん extends Monster {
 	public とんびくん(int ID) {
-		name="とんびくん";
-		HP=35;
-		OverHP=52;
-		ATK=8;
-		EXP=100;
-		Gold=5;
-		Turn=5;
-		this.ID=ID;
+		name = "とんびくん";
+		HP = 35;
+		OverHP = 52;
+		ATK = 10;
+		EXP = 100;
+		Gold = 5;
+		Turn = 5;
+		this.ID = ID;
 	}
-	public void turn(BattleInterface bi,Battle battle) {
-		normalAttack(bi);
-	}
-	public int calcDamage(int damage) {
-		setDamage(damage);
-		return damage;
+
+	@Override
+	public void actions(GameService battle) {
+		if (HP % 3 == 0)
+			AttackActionList.INSTANCE.pecking(battle);
+		else
+			AttackActionList.INSTANCE.panetrateAttack(battle);
 	}
 }

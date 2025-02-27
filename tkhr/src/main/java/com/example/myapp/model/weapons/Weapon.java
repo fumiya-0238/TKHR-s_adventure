@@ -1,9 +1,10 @@
-package tkhr.weapons;
+package com.example.myapp.model.weapons;
 
-import tkhr.Battle;
-import tkhr.Player;
-import tkhr.battleScreen.itemPanel.ItemInterface;
-import tkhr.items.Item;
+import com.example.myapp.model.Player;
+import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.model.items.Item;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
 
 public abstract class Weapon extends Item {
 	private int ATK;
@@ -20,39 +21,38 @@ public abstract class Weapon extends Item {
 	}
 
 	public void attack(Battle battle) {
-		Player player = battle.getPlayer();
-		int damage = player.getATK();
-		battle.getMonster().calcDamageResult(damage, (player.amountPlayerCondition("研ぎ石状態") > 0), battle);
+		battle.getInfo().setDamage(battle.getPlayer().getATK());
 	}
 
 	public void weekAttack(Battle battle) {
 		Player player = battle.getPlayer();
 		int damage = player.getATK() - 1;
-		battle.getMonster().calcDamageResult(damage, (player.amountPlayerCondition("研ぎ石状態") > 0), battle);
+		battle.getMonster().calcDamageResult(damage,
+				(player.amountCondition(CreateCondition.PENETRATE) > 0), battle);
 	}
 
-	public void criticalAttack(Battle battle) {
+	public void criticalAttack(GameService battle) {
 		Player player = battle.getPlayer();
 		int damage = (int) (player.getATK() * 1.5);
 		player.setCritical(-1);
-		battle.getMonster().calcDamageResult(damage, (player.amountPlayerCondition("研ぎ石状態") > 0), battle);
+		battle.getMonster().calcDamageResult(damage,
+				(player.amountCondition(CreateCondition.PENETRATE) > 0), battle);
 	}
 
-	public void defence(Battle battle) {
+	public void defence(GameService battle) {
 		Player player = battle.getPlayer();
 		int a = player.getMAXHP() / 10;
-		int b = player.amountPlayerCondition("防御強化状態");
-		player.healResult(a*(int) (Math.pow(2, b)));
+		int b = player.amountCondition(CreateCondition.DEFENCE_BUFF);
+		player.healResult(a * (int) (Math.pow(2, b)));
 	}
 
-	public void tension(Battle battle) {
+	public void tension(GameService battle) {
 		battle.getPlayer().setTension(25);
 	}
 
 	@Override
-	protected String useResult(Battle battle, int i, ItemInterface itemInterface) {
+	protected String useResult(GameService battle, int i) {
 		// TODO 自動生成されたメソッド・スタブ
-		itemInterface.removeItem(i);
-		return battle.getMonster().calcDamageResult(ATK,true,battle);
+		return battle.getMonster().calcDamageResult(ATK, true, battle);
 	}
 }

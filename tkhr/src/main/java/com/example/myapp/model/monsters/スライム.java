@@ -1,7 +1,7 @@
-package tkhr.monsters;
+package com.example.myapp.model.monsters;
 
-import tkhr.Battle;
-import tkhr.monsters.actions.AttackActionList;
+import com.example.myapp.service.GameService;
+import com.example.myapp.model.monsters.actions.AttackActionList;
 
 public class スライム extends Monster {
 	public スライム(int ID) {
@@ -17,19 +17,8 @@ public class スライム extends Monster {
 	}
 
 	@Override
-	public void actions(Battle battle) {
+	public void actions(GameService battle) {
 		AttackActionList.INSTANCE.normalAttack(battle);
 	}
 
-	@Override
-	public void death(Battle battle) {
-		// TODO 自動生成されたメソッド・スタブ
-		super.standardDeath(battle);
-	}
-
-	@Override
-	public int simulateDamage(int damage, boolean penetrate, Battle battle) {
-		// TODO 自動生成されたメソッド・スタブ
-		return damage;
-	}
 }

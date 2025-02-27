@@ -1,4 +1,4 @@
-package tkhr.weapons;
+package com.example.myapp.model.weapons;
 
 public class 骨の槍 extends Weapon {
 	public 骨の槍() {

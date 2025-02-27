@@ -1,7 +1,8 @@
-package tkhr.monsters;
+package com.example.myapp.model.monsters;
 
 import tkhr.Battle;
-import tkhr.battleScreen.BattleInterface;
+import tkhr.monsters.actions.AttackActionList;
+
 
 public class ネペント extends Monster{
 	public ネペント(int ID) {
@@ -14,11 +15,12 @@ public class ネペント extends Monster{
 		Turn=4;
 		this.ID=ID;
 	}
-	public void turn(BattleInterface bi,Battle battle) {
-		normalAttack(bi);
-	}
-	public int calcDamage(int damage) {
-		setDamage(damage);
-		return damage;
+	
+	@Override
+	public void actions(GameService battle) {
+		if(HP%3==0)
+		AttackActionList.INSTANCE.normalAttack(battle);
+		else
+		AttackActionList.INSTANCE.drainAttack(battle);
 	}
 }

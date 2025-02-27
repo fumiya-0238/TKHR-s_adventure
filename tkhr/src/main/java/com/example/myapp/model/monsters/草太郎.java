@@ -1,6 +1,8 @@
-package tkhr.monsters;
+package com.example.myapp.model.monsters;
 
 import tkhr.Battle;
+import tkhr.monsters.actions.AttackActionList;
+import tkhr.monsters.actions.AssistActionList;
 
 public class 草太郎 extends Monster{
 	public 草太郎(int ID) {
@@ -15,20 +17,10 @@ public class 草太郎 extends Monster{
 	}
 
 	@Override
-	public int simulateDamage(int damage, boolean penetrate, Battle battle) {
-		// TODO 自動生成されたメソッド・スタブ
-		return damage;
-	}
-
-	@Override
-	public void actions(Battle battle) {
-		// TODO 自動生成されたメソッド・スタブ
-		
-	}
-
-	@Override
-	public void death(Battle battle) {
-		// TODO 自動生成されたメソッド・スタブ
-		
+	public void actions(GameService battle) {
+		if(HP%3==0)
+		AssistActionList.INSTANCE.heal(battle,3);
+		else
+		AttackActionList.INSTANCE.normalAttack(battle);
 	}
 }

@@ -1,65 +1,58 @@
-package tkhr.monsters;
+package com.example.myapp.model.monsters;
 
-import java.util.List;
+import com.example.myapp.model.Living;
+import com.example.myapp.service.GameService;
+import com.example.myapp.model.conditions.Condition;
+import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.model.monsters.actions.AttackActionList;
 
-import tkhr.Battle;
-import tkhr.monsters.conditions.MonsterCondition;
-
-public abstract class Monster {
+public abstract class Monster extends Living {
 	protected String name;
-	protected int HP;
-	protected int MAXHP;
 	protected int OverHP;
 	protected int MAXOverHP;
-	protected int ATK;
 	protected int EXP;
 	protected int Gold;
 	protected int Turn;
 	protected int ID;
 	protected boolean death;
-	protected List<MonsterCondition> conditions;
 
 	public void init() {
 		MAXHP = HP;
 		MAXOverHP = OverHP;
 	}
 
-	public String calcDamageResult(int damage, boolean penetrate, Battle battle) {
-		int resultDamage = simulateDamage(damage, penetrate, battle);
+	final public void calcDamageResult(Battle battle) {
+		int resultDamage = simulateDamage(battle);
 		String text = name + "に" + resultDamage + "ダメージを与えた。";
 		setDamage(resultDamage);
-		return text;
 	}
 
-	public abstract int simulateDamage(int damage, boolean penetrate, Battle battle);
+	final public int simulateDamage(int damage, boolean penetrate, GameService battle) {
+		int action = battle.getPlayer().getAction();
+		if (amountMonsterCondition(CreateCondition.CONTROL_SWITCH) == 1 && action == 3) {
+			battle.setMonster(new 暴走培養(34));
+		}
+		if (amountMonsterCondition(CreateCondition.WEEK_INVALID) == 1 && action == 2) {
+			damage = 0;
+		}
 
-	public abstract void actions(Battle battle);
-
-	public void templeactions(Battle battle) {
+		return damage;
 	}
 
-	public abstract void death(Battle battle);
+	public abstract void actions(GameService battle);
 
-	public String standardDeath(Battle battle) {
-		//text.append(getName() + "を倒した。");
+	public void templeactions(GameService battle) {
+	}
 
+	public String standardDeath(GameService battle) {
+		// text.append(getName() + "を倒した。");
+		if (amountMonsterCondition(CreateCondition.TENACITY) == 1)
+			AttackActionList.INSTANCE.normalAttack(battle);
 		battle.getPlayer().setEXPGold(EXP, Gold, Turn > 0, OverHP == 0);
 		return "";
 	}
 
 	public void turnEnd() {
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public int getHP() {
-		return HP;
-	}
-
-	public int getOverHP() {
-		return OverHP;
 	}
 
 	public void setTurn(int turn) {
@@ -83,6 +76,18 @@ public abstract class Monster {
 			HP = MAXHP;
 			OverHP = MAXOverHP;
 		}
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getHP() {
+		return HP;
+	}
+
+	public int getOverHP() {
+		return OverHP;
 	}
 
 	public int getATK() {
@@ -109,42 +114,23 @@ public abstract class Monster {
 		Turn--;
 	}
 
-	public void plusMonsterCondition(String name) {
-		for (MonsterCondition condition : conditions) {
-			if (condition.getName().equals(name)) {
+	public void plusMonsterCondition(CreateCondition c) {
+		for (Condition condition : conditions) {
+			if (condition.getCondition() == c) {
 				condition.plusAmount();
+				return;
 			}
 		}
-	}
-	public void plusMonsterCondition(String name,int amount) {
-		for (MonsterCondition condition : conditions) {
-			if (condition.getName().equals(name)) {
-				condition.setAmount(amount);
-			}
-		}
-	}
-	public void minusPlayerCondition(String name) {
-		for (MonsterCondition condition : conditions) {
-			if (condition.getName().equals(name)) {
-				condition.minusAmount();
-			}
-		}
+		conditions.add(c.getCondition());
 	}
 
-	public void endMonsterCondition(String name) {
-		for (MonsterCondition condition : conditions) {
-			if (condition.getName().equals(name)) {
-				condition.turnEnd();
-			}
-		}
-	}
-
-	public int amountPlayerCondition(String name) {
-		for (MonsterCondition condition : conditions) {
-			if (condition.getName().equals(name)) {
+	public int amountMonsterCondition(CreateCondition c) {
+		for (Condition condition : conditions) {
+			if (condition.getCondition() == c) {
 				return condition.getAmount();
 			}
 		}
 		return 0;
 	}
+
 }

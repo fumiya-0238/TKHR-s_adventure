@@ -1,4 +1,4 @@
-package tkhr.weapons;
+package com.example.myapp.model.weapons;
 
 public class SIMPLE_IS_BEST extends Weapon {
 	public SIMPLE_IS_BEST() {

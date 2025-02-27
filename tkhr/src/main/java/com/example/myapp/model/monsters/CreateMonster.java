@@ -1,4 +1,4 @@
-package tkhr.monsters;
+package com.example.myapp.model.monsters;
 
 public enum CreateMonster {
 	INSTANCE;

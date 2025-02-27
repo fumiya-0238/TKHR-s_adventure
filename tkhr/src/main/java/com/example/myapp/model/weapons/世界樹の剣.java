@@ -1,42 +1,51 @@
-package tkhr.weapons;
+package com.example.myapp.model.weapons;
 
-import tkhr.Battle;
-import tkhr.Player;
-import tkhr.items.薬草;
+import com.example.myapp.service.GameService;
+import com.example.myapp.model.Player;
+import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.model.items.薬草;
 
-public class 世界樹の剣 extends Weapon{
+public class 世界樹の剣 extends Weapon {
 	public 世界樹の剣() {
-		super("世界樹の剣",100,"ターン終了時、薬草を1個手に入れる。強攻撃をするとアイテム欄の薬草を全て消滅し、消滅した数×5ダメージ追加",7);
-		
+		super("世界樹の剣", 100, "ターン終了時、薬草を1個手に入れる。強攻撃をするとアイテム欄の薬草を全て消滅し、消滅した数×5ダメージ追加", 7);
+
 	}
+
 	@Override
-	public void attack(Battle battle) {
+	public void attack(GameService battle) {
 		super.attack(battle);
-		battle.setItem(new 薬草());
+		battle.getPlayer().setItem(new 薬草());
 	}
+
 	@Override
-	public void weekAttack(Battle battle) {
+	public void weekAttack(GameService battle) {
 		super.weekAttack(battle);
-		battle.setItem(new 薬草());
+		battle.getPlayer().setItem(new 薬草());
 	}
+
 	@Override
-	public void criticalAttack(Battle battle) {
+	public void criticalAttack(GameService battle) {
 		Player player = battle.getPlayer();
-		battle.getMonster().calcDamageResult((int)(player.getATK()*1.5)+battle.getPlayer().countItem("薬草")*5,(player.amountPlayerCondition("研ぎ石状態") > 0),battle);
-	/*	public void removeItem(int i) {
-			player.removeItem(i);
-			notifyObservers();
-		}*/
-		battle.setItem(new 薬草());
+		battle.getMonster().calcDamageResult((int) (player.getATK() * 1.5) + battle.getPlayer().countItem("薬草") * 5,
+				(player.amountCondition(CreateCondition.PENETRATE) > 0), battle);
+		/*
+		 * public void removeItem(int i) {
+		 * player.removeItem(i);
+		 * notifyObservers();
+		 * }
+		 */
+		battle.getPlayer().setItem(new 薬草());
 	}
+
 	@Override
-	public void defence(Battle battle) {
+	public void defence(GameService battle) {
 		super.defence(battle);
-		battle.setItem(new 薬草());
+		battle.getPlayer().setItem(new 薬草());
 	}
+
 	@Override
-	public void tension(Battle battle) {
+	public void tension(GameService battle) {
 		super.tension(battle);
-		battle.setItem(new 薬草());
+		battle.getPlayer().setItem(new 薬草());
 	}
 }

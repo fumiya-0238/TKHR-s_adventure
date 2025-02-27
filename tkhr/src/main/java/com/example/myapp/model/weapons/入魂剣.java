@@ -1,4 +1,4 @@
-package tkhr.weapons;
+package com.example.myapp.model.weapons;
 
 import tkhr.Battle;
 
@@ -8,7 +8,7 @@ public class 入魂剣 extends Weapon {
 	}
 
 	@Override
-	public void criticalAttack(Battle battle) {
+	public void criticalAttack(GameService battle) {
 		super.criticalAttack(battle);
 		battle.getPlayer().plusPlayerCondition("根性状態");
 	}

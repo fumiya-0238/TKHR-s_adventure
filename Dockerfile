@@ -12,4 +12,4 @@ ENV PATH="/opt/java/openjdk/bin:${PATH}"
 COPY --from=build /app/target/tkhr-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENV PORT=8080
-ENTRYPOINT ["/opt/java/openjdk/bin/java", "-jar", "app.jar", "--server.port=${PORT}"]
+ENTRYPOINT ["/opt/java/openjdk-17/bin/java", "-jar", "app.jar", "--server.port=${PORT}"]

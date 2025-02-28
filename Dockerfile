@@ -6,9 +6,12 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jdk-focal
 WORKDIR /app
-RUN echo "=== JAVA_PATH DEBUG START ==="
-RUN echo "JAVA_PATH=$(find / -name java -type f 2>/dev/null || echo 'Java not found')"
-RUN echo "=== JAVA_PATH DEBUG END ==="
+RUN printf "=== JAVA_PATH DEBUG START ==="
+RUN printf "JAVA_PATH=%s\n" "$(find / -name java -type f 2>/dev/null || echo 'Java not found')"
+RUN ls -l /opt/java/openjdk/bin/ 2>/dev/null || echo "Java directory not found"
+RUN which java || echo "Java not in PATH"
+RUN /bin/sh -c 'echo "JAVA_PATH=$(find / -name java -type f 2>/dev/null || echo \"Java not found\")"'
+RUN printf "=== JAVA_PATH DEBUG END ==="
 COPY --from=build /app/target/tkhr-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENV PORT=8080

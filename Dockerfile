@@ -1,13 +1,13 @@
-# ビルドステージ
 FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# 実行ステージ
 FROM eclipse-temurin:17-jdk-focal
 WORKDIR /app
+RUN echo "JAVA_PATH=$(find / -name java -type f 2>/dev/null || echo 'Java not found')"
+RUN echo "JAVA_VERSION=$(/bin/sh -c 'java -version' 2>&1 || echo 'Java not executable')"
 ENV PATH="/opt/java/openjdk-17/bin:${PATH}"
 COPY --from=build /app/target/tkhr-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080

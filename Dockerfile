@@ -2,6 +2,7 @@ FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
+RUN echo "JAVA_PATH=$(find / -name java -type f 2>/dev/null || echo 'Java not found')"
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jdk-focal

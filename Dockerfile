@@ -6,7 +6,7 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jdk-focal
 WORKDIR /app
-ENV PATH="/usr/bin:${PATH}"
+ENV PATH="/opt/java/openjdk-17/bin:${PATH}"
 COPY --from=build /app/target/tkhr-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENV PORT=8080

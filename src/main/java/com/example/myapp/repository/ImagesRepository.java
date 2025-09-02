@@ -1,24 +1,24 @@
 package com.example.myapp.repository;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Base64;
-import java.util.Collections;
-
-import javax.imageio.ImageIO;
-import java.nio.file.Paths;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.io.ByteArrayOutputStream;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
+
+import javax.imageio.ImageIO;
 
 public enum ImagesRepository {
     INSTANCE;

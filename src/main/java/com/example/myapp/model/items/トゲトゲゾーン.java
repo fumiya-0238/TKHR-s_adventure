@@ -1,18 +1,17 @@
 package com.example.myapp.model.items;
 
-import com.example.myapp.model.conditions.CreateCondition;
+import java.util.List;
+
+import com.example.myapp.creater.ConditionEnum;
+import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
-public class トゲトゲゾーン extends Item {
-	public トゲトゲゾーン() {
-		super("トゲトゲゾーン", 70);
-		setText("毎ターン相手に5ダメージ");
-	}
+public class トゲトゲゾーン extends Item{
 
 	@Override
-	protected void use(Battle battle, int i) {
-		// TODO Auto-generated method stub
-		battle.getMonster().plusCondition(CreateCondition.THORN);
+	public void use(Battle battle, List<ActionInfo> infos, int n) {
+		// TODO 自動生成されたメソッド・スタブ
+		battle.getMonster().plusCondition(battle, ConditionEnum.トゲトゲ);
 	}
 
 }

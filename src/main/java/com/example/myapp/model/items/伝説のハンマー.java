@@ -1,15 +1,13 @@
 package com.example.myapp.model.items;
 
+import java.util.List;
+
+import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
-public class 伝説のハンマー extends Item {
-    public 伝説のハンマー() {
-        super("伝説のハンマー", 500);
-        setText("デュランダルとエクスカリバーを同時に装備すると合体させる");
-    }
-
-    @Override
-    protected void use(Battle battle, int i) {
-        // TODO Auto-generated method stub
-    }
+public class 伝説のハンマー extends Item{
+	@Override
+	public void use(Battle battle, List<ActionInfo> info, int n) {
+		// TODO 自動生成されたメソッド・スタブ
+	}
 }

@@ -1,17 +1,16 @@
 package com.example.myapp.model.items;
 
+import java.util.List;
+
 import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
 public class ダメージ草 extends Item {
-	public ダメージ草() {
-		super("ダメージ草", 3);
-		setText("使うと自分が10ダメージ受けます");
+	@Override
+	public void use(Battle battle, List<ActionInfo> infos, int n) {
+		// TODO 自動生成されたメソッド・スタブ
+		infos.get(n).setDamage(10);
+		battle.getPlayer().calcDamage(battle, infos, n);
 	}
 
-	@Override
-	protected void use(Battle battle, int i) {
-		// TODO 自動生成されたメソッド・スタブ
-		battle.getPlayer().calcDamageResult(battle, new ActionInfo(true, 10, true));
-	}
 }

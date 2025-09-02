@@ -1,17 +1,15 @@
 package com.example.myapp.model.items;
 
+import java.util.List;
+
 import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
-public class 火の玉 extends Item {
-	public 火の玉() {
-		super("火の玉", 12);
-		setText("敵に3ダメージ与えます");
-	}
-
+public class 火の玉 extends Item{
 	@Override
-	public void use(Battle battle, int i) {
+	public void use(Battle battle, List<ActionInfo> infos, int n) {
 		// TODO 自動生成されたメソッド・スタブ
-		battle.getMonster().calcDamageResult(battle, new ActionInfo(true, 3, true));
+		infos.get(n).setDamage(3);
+		battle.getMonster().calcDamage(battle,infos,n);
 	}
 }

@@ -1,18 +1,15 @@
 package com.example.myapp.model.items;
 
-import com.example.myapp.model.conditions.CreateCondition;
+import java.util.List;
+
+import com.example.myapp.creater.ConditionEnum;
+import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
 public class 挑発 extends Item {
-    // 強攻撃を強制
-    public 挑発() {
-        super("挑発", 50);
-        setText("次のターン強攻撃をさせる");
-    }
-
-    @Override
-    public void use(Battle battle, int i) {
-        // TODO 自動生成されたメソッド・スタブ
-        battle.getMonster().plusCondition(CreateCondition.TAUNT);
-    }
+	@Override
+	public void use(Battle battle, List<ActionInfo> infos, int n) {
+		// TODO 自動生成されたメソッド・スタブ
+		battle.getMonster().plusCondition(battle, infos, n, ConditionEnum.挑発);
+	}
 }

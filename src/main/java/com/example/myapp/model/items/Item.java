@@ -1,25 +1,31 @@
+
 package com.example.myapp.model.items;
 
+import java.util.List;
+
+import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
 public abstract class Item {
+	protected int id;
 	protected String name;
-	private int price;
-	protected String text;
-	protected boolean unique;
+	protected int price;
+	protected boolean active;
+	private List<String> relateds;
 
-	public Item(String name, int price) {
+	public void setStatus(int id, String name, int price) {
+		this.id = id;
 		this.name = name;
 		this.price = price;
 	}
-
-	protected abstract void use(Battle battle, int i);
-
-	public void commonUse(Battle battle, int i) {
-		StringBuilder sb = new StringBuilder(name);
-		sb.append("を使った。");
-		use(battle, i);
-		sb.toString();
+	
+	public abstract void use(Battle battle, List<ActionInfo> infos, int n);
+	protected void commonUse(ActionInfo info) {
+		info.addMessages("プレイヤーは"+name+"を使った");
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 	public int getPrice() {
@@ -30,12 +36,8 @@ public abstract class Item {
 		return name;
 	}
 
-	public String getText() {
-		return text;
-	}
 
-	public void setText(String text) {
-		this.text = text;
+	public boolean getActive() {
+		return active;
 	}
-
 }

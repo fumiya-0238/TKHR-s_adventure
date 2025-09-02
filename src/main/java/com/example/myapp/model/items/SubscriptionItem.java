@@ -1,21 +1,18 @@
 package com.example.myapp.model.items;
 
-import com.example.myapp.model.conditions.CreateCondition;
+import com.example.myapp.creater.ConditionEnum;
 import com.example.myapp.repository.Battle;
 
 public abstract class SubscriptionItem extends Item {
-	private boolean active;
-
-	public SubscriptionItem(String name, int price) {
-		super(name, price);
+	public void registration(Battle battle, ConditionEnum conditionEnum) {
+		battle.getPlayer().plusCondition(battle, conditionEnum);
+		active = true;
 	}
 
-	protected void registration(Battle battle, int i, CreateCondition condition) {
-		if (active) {
-			battle.getPlayer().plusCondition(condition);
-		} else {
-			battle.getPlayer().plusCondition(condition);
-			active = true;
-		}
+	public void cancel(Battle battle, ConditionEnum conditionEnum) {
+		battle.getPlayer().removeCondition(conditionEnum);
+		active = false;
 	}
+	 public abstract void registration(Battle battle);
+	 public abstract void cancel(Battle battle);
 }

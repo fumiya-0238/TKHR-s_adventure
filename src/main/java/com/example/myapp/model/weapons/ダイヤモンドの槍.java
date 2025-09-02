@@ -1,28 +1,19 @@
 package com.example.myapp.model.weapons;
 
-import com.example.myapp.repository.ActionInfo;
-import com.example.myapp.repository.Battle;
+import com.example.myapp.creater.ConditionEnum;
+import com.example.myapp.model.Player;
 
-public class ダイヤモンドの槍 extends Weapon {
-	public ダイヤモンドの槍() {
-		super("ダイヤモンドの槍", 70, "強攻撃回数+2。全ての攻撃が貫通攻撃になる。", 8);
+public class ダイヤモンドの槍 extends Weapon{
+	@Override
+	public void equip(Player player) {
+		player.plusCondition(ConditionEnum.貫通);
+		player.setConditionTurn(ConditionEnum.貫通,"∞");
+		player.plusDefaultCritical(1);
 	}
 
 	@Override
-	public void attack(Battle battle, ActionInfo info) {
-		super.attack(battle, info);
-		info.setPenetrate(true);
-	}
-
-	@Override
-	public void weekAttack(Battle battle, ActionInfo info) {
-		super.weekAttack(battle, info);
-		info.setPenetrate(true);
-	}
-
-	@Override
-	public void criticalAttack(Battle battle, ActionInfo info) {
-		super.criticalAttack(battle, info);
-		info.setPenetrate(true);
+	public void takeOff(Player player) {
+		player.removeCondition(ConditionEnum.貫通);
+		player.plusDefaultCritical(-1);
 	}
 }

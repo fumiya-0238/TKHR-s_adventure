@@ -1,7 +1,15 @@
 package com.example.myapp.model.weapons;
 
+import com.example.myapp.creater.ConditionEnum;
+import com.example.myapp.model.Player;
+
 public class ブースティア extends Weapon {
-	public ブースティア() {
-		super("ブースティア", 70, "ブーストゲージの上昇量が4倍になる", 6);
+	@Override
+	public void equip(Player player) {
+		player.plusCondition(ConditionEnum.ブーストUP強化);
+	}
+	@Override
+	public void takeOff(Player player) {
+		player.removeCondition(ConditionEnum.ブーストUP強化);
 	}
 }

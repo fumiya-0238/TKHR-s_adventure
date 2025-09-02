@@ -1,7 +1,21 @@
 package com.example.myapp.model.weapons;
 
+import com.example.myapp.creater.ConditionEnum;
+import com.example.myapp.model.Player;
+
 public class デュランダル extends Weapon {
-	public デュランダル() {
-		super("デュランダル", 120, "全ての攻撃が貫通攻撃になる。強攻撃の倍率が1.5倍から2倍になる。HP+10", 9);
+	@Override
+	public void equip(Player player) {
+		player.plusCondition(ConditionEnum.貫通);
+		player.setConditionTurn(ConditionEnum.貫通, "∞");
+		player.plusCondition(ConditionEnum.強攻撃強化);
+		player.plusMAXHP(20);
+	}
+
+	@Override
+	public void takeOff(Player player) {
+		player.removeCondition(ConditionEnum.貫通);
+		player.removeCondition(ConditionEnum.強攻撃強化);
+		player.plusMAXHP(-20);
 	}
 }

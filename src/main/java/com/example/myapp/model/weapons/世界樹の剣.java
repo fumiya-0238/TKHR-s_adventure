@@ -1,55 +1,58 @@
 package com.example.myapp.model.weapons;
 
+import java.util.List;
+
+import com.example.myapp.creater.CreateItem;
 import com.example.myapp.model.Player;
 import com.example.myapp.model.items.Item;
 import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
-import com.example.myapp.model.items.薬草;
 
 public class 世界樹の剣 extends Weapon {
-	public 世界樹の剣() {
-		super("世界樹の剣", 100, "ターン終了時、薬草を1個手に入れる。強攻撃をするとアイテム欄の薬草を全て消滅し、消滅した数×5ダメージ追加", 7);
-
+	private void getLeaf(Battle battle, List<ActionInfo> infos, int n) {
+		ActionInfo info = new ActionInfo();
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(1));
+		info.addMessages("薬草を手に入れた");
 	}
 
 	@Override
-	public void attack(Battle battle, ActionInfo info) {
-		super.attack(battle, info);
-		battle.getPlayer().setItem(new 薬草());
+	public void attack(Battle battle, List<ActionInfo> infos, int n) {
+		super.attack(battle, infos, n);
+		getLeaf(battle, infos, n);
 	}
 
 	@Override
-	public void weekAttack(Battle battle, ActionInfo info) {
-		super.weekAttack(battle, info);
-		battle.getPlayer().setItem(new 薬草());
+	public void weekAttack(Battle battle, List<ActionInfo> infos, int n) {
+		super.weekAttack(battle, infos, n);
+		getLeaf(battle, infos, n);
 	}
 
 	@Override
-	public void criticalAttack(Battle battle, ActionInfo info) {
-		super.criticalAttack(battle, info);
+	public void criticalAttack(Battle battle, List<ActionInfo> infos, int n) {
+		//super.criticalAttack(battle, infos, n);
 		Player player = battle.getPlayer();
-		int n = 0;
+		int kusa = 0;
 		for (int i = 0; i < player.getItems().size(); i++) {
 			Item item = player.getItems().get(i);
-			if (item.getName().equals("薬草")) {
-				player.getItems().remove(i);
+			if (item.getId() == 1) {
+				player.removeItem(battle, i);
 				i--;
-				n++;
+				kusa++;
 			}
 		}
-		info.setDamage((int) (player.getATK() * 1.5 + n * 5));
-		battle.getPlayer().setItem(new 薬草());
+		infos.get(n).setDamage((int) ((player.getAttack() + kusa * 5) * 1.5));
+		getLeaf(battle, infos, n);
 	}
 
 	@Override
-	public void defence(Battle battle, ActionInfo info) {
-		super.defence(battle, info);
-		battle.getPlayer().setItem(new 薬草());
+	public void defence(Battle battle, List<ActionInfo> infos, int n) {
+		super.defence(battle, infos, n);
+		getLeaf(battle, infos, n);
 	}
 
 	@Override
-	public void tension(Battle battle, ActionInfo info) {
-		super.tension(battle, info);
-		battle.getPlayer().setItem(new 薬草());
+	public void tension(Battle battle, List<ActionInfo> infos, int n) {
+		super.tension(battle, infos, n);
+		getLeaf(battle, infos, n);
 	}
 }

@@ -1,7 +1,15 @@
 package com.example.myapp.model.weapons;
 
-public class 鉄の槍 extends Weapon{
-	public 鉄の槍() {
-		super("鉄の槍",60,"",5);
+import com.example.myapp.model.Player;
+
+public class 鉄の槍 extends Weapon {
+	@Override
+	public void equip(Player player) {
+		player.plusDefaultCritical(1);
+	}
+
+	@Override
+	public void takeOff(Player player) {
+		player.plusDefaultCritical(-1);
 	}
 }

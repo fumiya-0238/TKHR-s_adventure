@@ -1,65 +1,101 @@
 package com.example.myapp.model.weapons;
 
+import java.util.List;
+
+import com.example.myapp.creater.ConditionEnum;
 import com.example.myapp.model.Player;
-import com.example.myapp.model.conditions.CreateCondition;
-import com.example.myapp.model.items.Item;
 import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
-public abstract class Weapon extends Item {
-	private int ATK;
+public abstract class Weapon {
+	protected int id;
+	protected String name;
+	protected int price;
+	protected int attack;
 
-	public Weapon(String name, int price, String text, int ATK) {
-		super(name, price);
-		String info = name + " 攻撃力 " + ATK + "" + text;
-		setText(info);
-		this.ATK = ATK;
+	public void setStatus(int id, String name, int price, int attack) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.attack = attack;
 	}
 
-	public int getATK() {
-		return ATK;
+	public void equip(Player player) {
 	}
 
-	public void attack(Battle battle, ActionInfo info) {
-		Player player = battle.getPlayer();
-		info.setAttackIsTrue();
-		info.setDamage(player.getATK());
-		info.setPenetrate(player.amountCondition(CreateCondition.PENETRATE) > 0);
+	public void takeOff(Player player) {
 	}
 
-	public void weekAttack(Battle battle, ActionInfo info) {
-		Player player = battle.getPlayer();
-		info.setAttackIsTrue();
-		info.setDamage(player.getATK() - 1);
-		info.setPenetrate(player.amountCondition(CreateCondition.PENETRATE) > 0);
+	public void battleStart(Battle battle, List<ActionInfo> infos) {
 	}
 
-	public void criticalAttack(Battle battle, ActionInfo info) {
-		Player player = battle.getPlayer();
-		player.setCritical(-1);
-		info.setAttackIsTrue();
-		info.setDamage((int) (player.getATK() * 1.5));
-		info.setPenetrate(player.amountCondition(CreateCondition.PENETRATE) > 0);
+	public void turnStart(Battle battle, List<ActionInfo> infos) {
 	}
 
-	public void defence(Battle battle, ActionInfo info) {
-		Player player = battle.getPlayer();
-		int a = player.getMAXHP() / 10;
-		int b = player.amountCondition(CreateCondition.DEFENCE_BUFF);
-		player.healResult(a * (int) (Math.pow(2, b)));
+	public void turnEnd(Battle battle, List<ActionInfo> infos) {
 	}
 
-	public void tension(Battle battle, ActionInfo info) {
-		battle.getPlayer().setTension(25);
+	public void attack(Battle battle, List<ActionInfo> infos, int n) {
+		if (battle.getPlayer().getWeapons().get(0).getId() == id) {
+			Player player = battle.getPlayer();
+			infos.get(n).setAttackIs(true);
+			double tension = 1.0 + ((double) player.getTension() / 100);
+			infos.get(n).setDamage((int) (player.getAttack() * tension));
+			infos.get(n).setPenetrate(player.amountCondition(ConditionEnum.貫通) > 0);
+			player.resetTension();
+		}
 	}
 
-	@Override
-	protected void use(Battle battle, int i) {
-		// TODO 自動生成されたメソッド・スタブ
-		ActionInfo info = new ActionInfo();
-		info.setAttackIsTrue();
-		info.setDamage(ATK);
-		info.setPenetrate(true);
-		battle.getMonster().calcDamageResult(battle, info);
+	public void weekAttack(Battle battle, List<ActionInfo> infos, int n) {
+		if (battle.getPlayer().getWeapons().get(0).getId() == id) {
+			Player player = battle.getPlayer();
+			infos.get(n).setAttackIs(true);
+			infos.get(n).setDamage(player.getAttack() - 1);
+			infos.get(n).setPenetrate(player.amountCondition(ConditionEnum.貫通) > 0);
+		}
+	}
+
+	public void criticalAttack(Battle battle, List<ActionInfo> infos, int n) {
+		if (battle.getPlayer().getWeapons().get(0).getId() == id) {
+			Player player = battle.getPlayer();
+			player.plusCritical(-1);
+			infos.get(n).setAttackIs(true);
+			double tension = 1.0 + ((double) player.getTension() / 100);
+			infos.get(n).setDamage((int) (player.getAttack() * tension * 1.5));
+			infos.get(n).setPenetrate(player.amountCondition(ConditionEnum.貫通) > 0);
+			player.resetTension();
+		}
+	}
+
+	public void defence(Battle battle, List<ActionInfo> infos, int n) {
+		if (battle.getPlayer().getWeapons().get(0).getId() == id) {
+			Player player = battle.getPlayer();
+			player.plusCondition(battle, infos, n, ConditionEnum.防御);
+		}
+	}
+
+	public void tension(Battle battle, List<ActionInfo> infos, int n) {
+		if (battle.getPlayer().getWeapons().get(0).getId() == id) {
+			battle.getPlayer().plusTension(battle, infos, n, 25);
+		}
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public int getAttack() {
+		return attack;
+	}
+	public void setAttack(int attack) {
+		this.attack = attack;
 	}
 }

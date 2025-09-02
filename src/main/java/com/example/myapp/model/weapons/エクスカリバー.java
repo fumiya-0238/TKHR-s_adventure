@@ -1,7 +1,49 @@
 package com.example.myapp.model.weapons;
 
+import java.util.List;
+
+import com.example.myapp.creater.CreateItem;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
+
 public class エクスカリバー extends Weapon {
-	public エクスカリバー() {
-		super("エクスカリバー", 90, "ターン終了時、とどめ玉、防御強化、ブーストアップを1個手に入れる。", 8);
+	@Override
+	public void attack(Battle battle, List<ActionInfo> infos, int n) {
+		super.attack(battle, infos, n);
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
 	}
-} 
+
+	@Override
+	public void weekAttack(Battle battle, List<ActionInfo> infos, int n) {
+		super.weekAttack(battle, infos, n);
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
+	}
+
+	@Override
+	public void criticalAttack(Battle battle, List<ActionInfo> infos, int n) {
+		super.criticalAttack(battle, infos, n);
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
+	}
+
+	@Override
+	public void defence(Battle battle, List<ActionInfo> infos, int n) {
+		super.defence(battle, infos, n);
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
+	}
+
+	@Override
+	public void tension(Battle battle, List<ActionInfo> infos, int n) {
+		super.tension(battle, infos, n);
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
+	}
+}

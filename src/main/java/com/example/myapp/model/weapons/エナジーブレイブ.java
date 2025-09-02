@@ -3,14 +3,14 @@ package com.example.myapp.model.weapons;
 import com.example.myapp.creater.ConditionEnum;
 import com.example.myapp.model.Player;
 
-public class VIPの剣 extends Weapon{
+public class エナジーブレイブ extends Weapon {
 	@Override
 	public void equip(Player player) {
-		player.plusCondition(ConditionEnum.VIP客);
+		player.plusCondition(ConditionEnum.ヒールチャージ);
 	}
-	
+
 	@Override
 	public void takeOff(Player player) {
-		player.removeCondition(ConditionEnum.VIP客);
+		player.removeCondition(ConditionEnum.ヒールチャージ);
 	}
 }

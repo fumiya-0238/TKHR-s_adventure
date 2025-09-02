@@ -1,0 +1,414 @@
+const weaponName = document.getElementById("weaponName");
+const closeHover = (event) => {
+	const element = event.target;
+	element.style.outlineWidth = '3px';
+	element.style.outlineStyle = 'solid';
+	element.style.outlineColor = 'red';
+};
+const closeOut = (event) => {
+	const element = event.target;
+	element.style.outlineStyle = "none";
+};
+const closeClick = () => {
+	commandClickFlag = true;
+	infoElement.style.visibility = 'hidden';
+	pages.length = 0;
+};
+
+closeInfo.addEventListener("click", closeClick);
+closeInfo.addEventListener("mouseover", closeHover);
+closeInfo.addEventListener("mouseout", closeOut);
+
+weaponName.addEventListener('click', async() => {
+	await fetch('/myWeaponInfo')
+		.then(response => response.json())
+		.then(data => {
+			infoBody.innerHTML = '';
+			makeMyWeaponInfo(data);
+			infoElement.style.visibility = 'visible';
+		})
+		.catch(error => console.error('Error:', error));
+	pages.push("myWeapon");
+});
+
+weaponName.addEventListener('mouseover', (event) => {
+	const element = event.target;
+	element.style.outlineWidth = '3px';
+	element.style.outlineStyle = 'solid';
+	element.style.outlineColor = 'red';
+});
+
+weaponName.addEventListener('mouseout', async(event) => {
+	const element = event.target;
+	element.style.outlineStyle = "none";
+});
+
+const infoBody = document.getElementById('infoBody');
+
+function makeMyWeaponInfo(data) {
+	const nameFontSize = 30;
+	const textFontSize = 20
+	const gap = 150;
+	const kind = ["装備武器", "融合武器"];
+	let location = {
+		left: 0,
+		top: 0
+	}
+	let superDiv;
+	const canvas = document.createElement('canvas');
+	const ctx = canvas.getContext('2d');
+	canvas.style.width = '427px';
+	canvas.style.height = '100px';
+	canvas.style.top = '150px';
+	canvas.style.position = 'absolute';
+	// 点線の設定
+	ctx.setLineDash([5, 5]); // [実線の長さ, 隙間の長さ]
+	ctx.lineWidth = 8; // 線の太さ
+	ctx.strokeStyle = 'yellow'; // 線の色
+
+	// 点線を描画
+	ctx.beginPath();
+	ctx.moveTo(0, 0); // 開始点 (x, y)
+	ctx.lineTo(427, 0); // 終了点 (x, y)
+	ctx.stroke();
+	for (let i = 0, l = data.length; i < l; i++) {
+		if (data[i].includes("weapon")) {
+			location.left = 0;
+			location.top = 0;
+			if (superDiv) {
+				infoBody.appendChild(superDiv);
+			}
+			const index = data[i++].substring(6);
+			superDiv = document.createElement('div');
+			superDiv.className = 'infoText';
+			superDiv.style.left = '5px';
+			superDiv.style.maxWidth = "417px";
+			superDiv.style.top = index * gap + 60 + 'px';
+			superDiv.style.fontSize = '20px';
+			const name = data[i++];
+			const nameWidth = name.length * nameFontSize
+			const weaponName = document.createElement('div');
+			weaponName.className = 'myWeaponName';
+			weaponName.textContent = name;
+			weaponName.style.fontSize = nameFontSize + 'px';
+			weaponName.style.position = 'absolute';
+			weaponName.style.left = (427 - nameWidth) / 2 + 'px';
+			weaponName.style.top = index * gap + 5 + 'px';
+			weaponName.style.width = nameWidth + 'px';
+			weaponName.style.color = "#ed6c00";
+			infoBody.appendChild(weaponName);
+			const mainWidth = 4 * textFontSize;
+			const weaponMain = document.createElement('div');
+			weaponMain.className = 'myWeaponMain';
+			weaponMain.textContent = kind[index];
+			weaponMain.style.fontSize = textFontSize + 'px';
+			weaponMain.style.position = 'absolute';
+			weaponMain.style.left = '5px';
+			weaponMain.style.top = index * gap + 5 + 'px';
+			weaponMain.style.width = mainWidth + 'px';
+			weaponMain.style.color = "#00ff00";
+			infoBody.appendChild(weaponMain);
+			if (index == 0) {
+				const attack = data[i];
+				const weaponAttack = document.createElement('div');
+				weaponAttack.id = 'weaponAttack';
+				weaponAttack.textContent = "攻撃力:" + attack;
+				weaponAttack.style.fontSize = textFontSize + 'px';
+				weaponAttack.style.position = 'absolute';
+				weaponAttack.style.left = '300px';
+				weaponAttack.style.top = parseInt(weaponName.style.top) + nameFontSize +
+					'px';
+				weaponAttack.style.whiteSpace = 'nowrap';
+				infoBody.appendChild(weaponAttack);
+			}
+			i++;
+
+		}
+		location = sliceDiv(superDiv, data[i], textFontSize, location);
+	}
+	infoBody.appendChild(canvas);
+	infoBody.appendChild(superDiv);
+}
+
+infoBody.addEventListener('click', async(event) => {
+	// クリックされた要素が "target" クラスを持つか確認
+	if (event.target.classList.contains('infoLink')) {
+		// すべての "target" 要素を取得
+		const elements = document.querySelectorAll('.infoLink');
+		// クリックされた要素のインデックスを取得
+
+		try {
+			const index = Array.from(elements).indexOf(event.target);
+			const response = await fetch('/subPageInfo', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					page: pages[pages.length - 1],
+					index: index
+				})
+			});
+			const data = await response.json();
+			pages.push(data[0]);
+			infoBody.innerHTML = '';
+			const kind = data[0].split("/");
+			switch (kind[0]) {
+				case "item":
+					makeItemInfo(data.slice('1'));
+					break;
+				case "weapon":
+					makeWeaponInfo(data.slice('1'));
+					break;
+				case "action":
+					makeActionInfo(data.slice('1'));
+					break;
+				case "condition":
+					makeConditionInfo(data.slice('1'));
+					break;
+			}
+			infoElement.style.visibility = 'visible';
+		} catch (error) {
+			console.error('エラー:', error);
+		}
+	}
+});
+infoBody.addEventListener('mouseover', (event) => {
+	// クリックされた要素が "target" クラスを持つか確認
+	const element = event.target;
+	if (element.classList.contains('infoLink')) {
+		element.style.outlineWidth = '3px';
+		element.style.outlineStyle = 'solid';
+		element.style.outlineColor = 'red';
+	}
+});
+infoBody.addEventListener('mouseout', async(event) => {
+	// クリックされた要素が "target" クラスを持つか確認
+	const element = event.target;
+	if (element.classList.contains('infoLink')) {
+		element.style.outlineStyle = "none";
+	}
+});
+
+function sliceDiv(superDiv, data, textFontSize, location) {
+	console.log(data);
+	const arrays = data.split("/");
+	const newLeft = arrays[0].length * textFontSize + location.left;
+	const textWidth = arrays[0].length * textFontSize;
+	tempDiv = document.createElement('div');
+	tempDiv.style.position = 'absolute';
+	if (437 < newLeft) {
+		switch (arrays[1]) {
+			case "infoLink":
+				location.top += textFontSize;
+				tempDiv.className = arrays[1];
+				tempDiv.textContent = arrays[0];
+				tempDiv.style.left = 0 + 'px';
+				tempDiv.style.top = location.top + 'px';
+				tempDiv.style.width = textWidth + 'px';
+				superDiv.appendChild(tempDiv);
+				location.left = textWidth;
+				break;
+			default:
+				const n = (437 - location.left) / textFontSize;
+				const divSlice = arrays[0].slice(0, n);
+				tempDiv.textContent = divSlice;
+				tempDiv.style.left = location.left + 'px';
+				tempDiv.style.top = location.top + 'px';
+				tempDiv.style.width = divSlice.length * textFontSize + 'px';
+				superDiv.appendChild(tempDiv);
+				location.left = 0;
+				location.top += textFontSize;
+				location = sliceDiv(superDiv, arrays[0].slice(n), textFontSize, location);
+		}
+	} else {
+		tempDiv.style.width = textWidth + 'px';
+		tempDiv.style.top = location.top + 'px';
+		tempDiv.style.left = location.left + 'px';
+		tempDiv.textContent = arrays[0];
+		location.left = newLeft;
+		superDiv.appendChild(tempDiv);
+	}
+	if (arrays[1] == "infoLink") {
+		tempDiv.className = arrays[1];
+	}
+	if (arrays[1] == "br") {
+		location.left = 0;
+		location.top += textFontSize;
+		}
+	return location;
+}
+
+function makeItemInfo(data) {
+	const nameFontSize = 30;
+	const textFontSize = 20;
+	let location = {
+		left: 0,
+		top: 0
+	}
+	const nameWidth = data[0].length * nameFontSize
+	const itemName = document.createElement('div');
+	itemName.id = 'itemName';
+	itemName.textContent = data[0];
+	itemName.style.fontSize = nameFontSize + 'px';
+	itemName.style.position = 'absolute';
+	itemName.style.left = (427 - nameWidth) / 2 + 'px';
+	itemName.style.top = '5px';
+	itemName.style.width = nameWidth + 'px';
+	itemName.style.color = "#00ff00";
+
+	const itemPrice = document.createElement('div');
+	itemPrice.id = 'itemPrice';
+	itemPrice.textContent = "買値:" + data[1];
+	itemPrice.style.fontSize = '20px';
+	itemPrice.style.position = 'absolute';
+	itemPrice.style.left = '300px';
+	itemPrice.style.top = parseInt(itemName.style.top) + nameFontSize + 'px';
+	itemPrice.style.whiteSpace = 'nowrap';
+	infoBody.appendChild(itemName);
+	infoBody.appendChild(itemPrice);
+	const superDiv = document.createElement('div');
+	superDiv.className = 'infoText';
+	superDiv.style.left = '5px';
+	superDiv.style.maxWidth = "417px";
+	superDiv.style.top = '70px';
+	superDiv.style.fontSize = '20px';
+	for (let i = 2, l = data.length; i < l; i++) {
+		location = sliceDiv(superDiv, data[i], textFontSize, location);
+	}
+	infoBody.appendChild(superDiv);
+}
+
+function makeWeaponInfo(data) {
+	const nameFontSize = 30;
+	const textFontSize = 20;
+	let location = {
+		left: 0,
+		top: 0
+	}
+	const nameWidth = data[0].length * nameFontSize
+	const weaponName = document.createElement('div');
+	weaponName.id = 'weaponName';
+	weaponName.textContent = data[0];
+	weaponName.style.fontSize = nameFontSize + 'px';
+	weaponName.style.position = 'absolute';
+	weaponName.style.left = (427 - nameWidth) / 2 + 'px';
+	weaponName.style.top = '5px';
+	weaponName.style.width = nameWidth + 'px';
+	weaponName.style.color = "#ed6c00";
+
+	const weaponAttack = document.createElement('div');
+	weaponAttack.id = 'weaponAttack';
+	weaponAttack.textContent = "攻撃力:" + data[1];
+	weaponAttack.style.fontSize = textFontSize + 'px';
+	weaponAttack.style.position = 'absolute';
+	weaponAttack.style.left = '300px';
+	weaponAttack.style.top = parseInt(weaponName.style.top) + nameFontSize + 'px';
+	weaponAttack.style.whiteSpace = 'nowrap';
+
+	const weaponPrice = document.createElement('div');
+	weaponPrice.id = 'weaponPrice';
+	weaponPrice.textContent = "買値:" + data[2];
+	weaponPrice.style.fontSize = textFontSize + 'px';
+	weaponPrice.style.position = 'absolute';
+	weaponPrice.style.left = '300px';
+	weaponPrice.style.top = parseInt(weaponName.style.top) + nameFontSize * 2 +
+		'px';
+	weaponPrice.style.whiteSpace = 'nowrap';
+	infoBody.appendChild(weaponName);
+	infoBody.appendChild(weaponAttack);
+	infoBody.appendChild(weaponPrice);
+	const superDiv = document.createElement('div');
+	superDiv.className = 'infoText';
+	superDiv.style.left = '5px';
+	superDiv.style.maxWidth = "417px";
+	superDiv.style.top = '70px';
+	superDiv.style.fontSize = '20px';
+	for (let i = 3, l = data.length; i < l; i++) {
+		location = sliceDiv(superDiv, data[i], textFontSize, location);
+	}
+	infoBody.appendChild(superDiv);
+}
+
+function makeActionInfo(data) {
+	const nameFontSize = 30;
+	const textFontSize = 20;
+	let location = {
+		left: 0,
+		top: 0
+	}
+	const nameWidth = data[0].length * nameFontSize
+	const actionName = document.createElement('div');
+	actionName.id = 'actionName';
+	actionName.textContent = data[0];
+	actionName.style.fontSize = nameFontSize + 'px';
+	actionName.style.position = 'absolute';
+	actionName.style.left = (427 - nameWidth) / 2 + 'px';
+	actionName.style.top = '5px';
+	actionName.style.width = nameWidth + 'px';
+	actionName.style.color = "#ff0000";
+
+	const actionAttackIs = document.createElement('div');
+	actionAttackIs.id = 'actionAttackIs';
+	actionAttackIs.textContent = "分類:" + data[1];
+	actionAttackIs.style.fontSize = textFontSize + 'px';
+	actionAttackIs.style.position = 'absolute';
+	actionAttackIs.style.left = '300px';
+	actionAttackIs.style.top = parseInt(actionName.style.top) + textFontSize +
+		'px';
+	actionAttackIs.style.whiteSpace = 'nowrap';
+	infoBody.appendChild(actionName);
+	infoBody.appendChild(actionAttackIs);
+	const superDiv = document.createElement('div');
+	superDiv.className = 'infoText';
+	superDiv.style.left = '5px';
+	superDiv.style.maxWidth = "417px";
+	superDiv.style.top = '70px';
+	superDiv.style.fontSize = '20px';
+	for (let i = 2, l = data.length; i < l; i++) {
+		location = sliceDiv(superDiv, data[i], textFontSize, location);
+	}
+	infoBody.appendChild(superDiv);
+}
+
+function makeConditionInfo(data) {
+	const nameFontSize = 30;
+	const textFontSize = 20;
+	let location = {
+		left: 0,
+		top: 0
+	}
+	const nameWidth = data[0].length * nameFontSize
+	const conditionName = document.createElement('div');
+	conditionName.id = 'conditionName';
+	conditionName.textContent = data[0];
+	conditionName.style.fontSize = nameFontSize + 'px';
+	conditionName.style.position = 'absolute';
+	conditionName.style.left = (427 - nameWidth) / 2 + 'px';
+	conditionName.style.top = '5px';
+	conditionName.style.width = nameWidth + 'px';
+	conditionName.style.color = "#00ffff";
+
+	const conditionDuplication = document.createElement('div');
+	conditionDuplication.id = 'conditionDuplication';
+	conditionDuplication.textContent = "重ねがけ:" + data[1];
+	conditionDuplication.style.fontSize = textFontSize + 'px';
+	conditionDuplication.style.position = 'absolute';
+	conditionDuplication.style.left = '300px';
+	conditionDuplication.style.top = parseInt(conditionName.style.top) +
+		textFontSize +
+		'px';
+	conditionDuplication.style.whiteSpace = 'nowrap';
+	infoBody.appendChild(conditionName);
+	infoBody.appendChild(conditionDuplication);
+	const superDiv = document.createElement('div');
+	superDiv.className = 'infoText';
+	superDiv.style.left = '5px';
+	superDiv.style.maxWidth = "417px";
+	superDiv.style.top = '70px';
+	superDiv.style.fontSize = '20px';
+	for (let i = 2, l = data.length; i < l; i++) {
+		location = sliceDiv(superDiv, data[i], textFontSize, location);
+	}
+	infoBody.appendChild(superDiv);
+}

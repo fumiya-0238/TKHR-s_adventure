@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>TKHRの冒険</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/infoPage.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/shop.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/condition.css}" />
+</head>
+
+<body>
+  <h1>クリックで操作できます</h1>
+  <img class="image" id="title" th:src="@{/images/Title.png}">
+
+  <div id="titlebutton">
+    <!--初級ボタン-->
+    <input type="image" class="difficultyButton image" id="beginner" th:src="${beginner_Button}">
+    <!--中級ボタン-->
+    <input type="image" class="difficultyButton image" id="novice" th:src="${novice_Button}">
+    <!--上級ボタン-->
+    <input type="image" class="difficultyButton image" id="expert" th:src="${expert_Button}">
+  </div>
+  <img class="image battleElement" id="battle" th:src="@{/images/Battle.png}">
+
+  <img class="image battleElement" id="monster" th:src="${monster_Image}">
+  
+  <img class="image" id="effect"　th:src = "@{/images/攻撃.gif}">
+  <div class="text battleElement" id="difficulty"></div>
+  <div class="text battleElement" id="floor"></div>
+  <div class="text battleElement" id="sumTurn"></div>
+  <div class="text battleElement" id="sumEXP"></div>
+  <div class="text battleElement" id="monsterName"></div>
+  <div class="text battleElement" id="boostPercent"></div>
+  <div class="text battleElement" id="monsterDamage"></div>
+  <canvas class="text battleElement" id="boostGauge" width="100px" height="25px"></canvas>
+  
+  <div class="text playerStatus battleElement" id="LV"></div>
+  <div class="text playerStatus battleElement" id="HP"></div>
+  <div class="text battleElement" id="maxHP"></div>
+  <div class="text playerStatus battleElement" id="ATK"></div>
+  <div class="text battleElement" id="weaponATK"></div>
+  <div class="text playerStatus battleElement" id="weapon">武器:</div>
+  <div class="text battleElement" id="weaponName"></div>
+  <div class="text playerStatus battleElement" id="subWeapon">融合:</div>
+  <div class="text battleElement" id="subWeaponName"></div>
+  <div class="text playerStatus battleElement" id="tension"></div>
+  <div class="text playerStatus battleElement" id="EXP"></div>
+  <div class="text playerStatus battleElement" id="Gold"></div>
+  <ul class="text list battleElement" id="itemList"></ul>
+  
+  <div id="commandButton">
+    <div class="text commands battleElement" id="attack">攻撃</div>
+    <div class="text commands battleElement" id="weekAttack">手加減</div>
+    <div class="text commands battleElement" id="criticalAttack"></div>
+    <div class="text commands battleElement" id="defence">防御</div>
+    <div class="text commands battleElement" id="tameru">ためる</div>
+    <div class="text commands battleElement" id="boost">ブースト</div>
+	<div class="text battleElement" id="conditionButton">状態確認</div>
+	 <div class="text battleElement" id="messageLog">メッセージログ</div>
+	 <div class="text battleElement" id="setting">設定</div>
+	 <div class="text battleElement" id="goTitle">タイトルに戻る</div>
+  </div>
+
+  <div class="text monsterStatus battleElement" id="monsterHP"></div>
+  <div class="text monsterStatus battleElement" id="overHP"></div>
+  <div class="text monsterStatus battleElement" id="monsterATK"></div>
+  <div class="text monsterStatus battleElement" id="monsterEXP"></div>
+  <div class="text monsterStatus battleElement" id="monsterGold"></div>
+  <div class="text monsterStatus battleElement" id="monsterTurn"></div>
+  
+
+  
+  <!--画面-->
+  <div id ="shop" th:insert="~{shop :: shopContent}"></div>
+  <div id ="info" th:insert="~{infoPage :: infoContent}"></div>
+  <!--
+  <div id ="condition" th:insert="~{conditionConfirm :: conditionConfirmContent}"></div>
+  <div id ="itemInfo" th:insert="~{itemInfo :: itemContent}"></div>
+  <div id ="weaponInfo" th:insert="~{weaponInfo :: weaponContent}"></div>-->
+  
+  <script th:src="@{/js/setting.js}"></script>
+  <script th:src="@{/js/title.js}"></script>
+  <script th:src="@{/js/battle.js}"></script>
+  <script th:src="@{/js/itemcommand.js}"></script>
+  <script th:src="@{/js/shop.js}"></script>
+  <script th:src="@{/js/info.js}"></script>
+  <script th:src="@{/js/componentEvent.js}"></script>
+  <script th:src="@{/js/conditionConfirm.js}"></script>
+</body>
+
+</html>

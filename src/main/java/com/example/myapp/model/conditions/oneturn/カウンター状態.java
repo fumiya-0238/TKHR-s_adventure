@@ -8,21 +8,19 @@ import com.example.myapp.model.Player;
 import com.example.myapp.model.conditions.Condition;
 import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
+import com.example.myapp.repository.ScreenChange;
+import com.example.myapp.repository.ScreenEnum;
 
 public class カウンター状態 extends Condition {
 	@Override
-	public void afterAction(Battle battle, Living living, List<ActionInfo> infos, int n) {
-		if(amount==0) {
-			return;
-		}
-		if(living.getHP()<=0) {
-			return;
-		}
-		if (living instanceof Player) {
-			((Player) living).attack(battle, infos, n);
-		}else {
-			CreateAction.INSTANCE.create(1).doAction(battle, infos, n);
-			//((Monster) living)..doAction.(battle, info);
+	public void counter(Battle battle, Living receiver, List<ActionInfo> infos) {
+		infos.remove(0);
+		battle.conditionMessage(receiver, name);
+		if (receiver instanceof Player) {
+			Battle.addLogs(new ScreenChange(ScreenEnum.カウンター攻撃, ""));
+			((Player) receiver).attack(battle, infos);
+		} else {
+			CreateAction.INSTANCE.create(1).actionEffect(battle, infos);
 		}
 	}
 }

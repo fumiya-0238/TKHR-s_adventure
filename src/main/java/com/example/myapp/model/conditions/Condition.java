@@ -2,7 +2,6 @@
 package com.example.myapp.model.conditions;
 
 import java.util.List;
-import java.util.Objects;
 
 import com.example.myapp.model.Living;
 import com.example.myapp.repository.ActionInfo;
@@ -11,9 +10,11 @@ import com.example.myapp.repository.Battle;
 public abstract class Condition {
 	private int id;
 	protected String name;
-	protected String turn;
+	protected int turn;
 	protected int amount;
 	protected boolean duplication;
+	protected boolean nonDelete;
+	protected int lv;
 
 	public void setStatus(int id, String name, boolean duplication) {
 		this.id = id;
@@ -21,85 +22,203 @@ public abstract class Condition {
 		this.duplication = duplication;
 	}
 
-	//バトル中コンディション発現
-	public void newCondition(Battle battle, Living living, List<ActionInfo> infos, int n) {
-		setTurn("1");
-		amount = 1;
-	}
-	
-	//最初コンディション発現
-	public void newCondition(Living living) {
-		setTurn("1");
-		amount = 1;
-	}
-
-	//攻撃力補正
-	public void attack(Battle battle, Living living, List<ActionInfo> infos, int n) {
-	}
-	//攻撃力補正
-	public void criticalAttack(Battle battle, Living living, List<ActionInfo> infos, int n) {
-	}
-	//ダメージ補正
-	public void damagePlus(Battle battle, Living living, List<ActionInfo> infos, int n) {
-	}
-
-	//受ける側ダメージ補正
-	public void calcDamage(Battle battle, Living living, List<ActionInfo> infos, int n) {
-	}
-
-	//ダメージを受けた後
-	public void setDamage(Battle battle, Living living, List<ActionInfo> infos, int n) {
-	}
-	//行動後
-	public void afterAction(Battle battle, Living living, List<ActionInfo> infos, int n) {
-	}
-	//回復時
-	public void calcHeal(Battle battle, Living living, List<ActionInfo> infos, int n) {
-	}
-
-	//アイテム使用時
-	public void useItem(Battle battle, Living living, List<ActionInfo> infos, int n) {
-	}
-
-	//バトル開始時
-	public void battleStart(Battle battle, Living living, List<ActionInfo> infos) {
-	}
-
-	//ターン開始時
-	public void turnStart(Battle battle, Living living, List<ActionInfo> infos) {
-	}
-
-	//モンスター行動時
-	public void monsterAction(Battle battle) {
-	}
-
-	//ゴールド消費時
-	public void useGold(int gold) {
-	}
-
-	//ターン終了時
-	public void turnEnd(Battle battle, Living living, List<ActionInfo> infos) {
-		if (turn.equals("∞")) {
-			return;
-		}
-		int turn = Integer.parseInt(this.turn);
-		if (turn > 0) {
-			turn--;
-			this.turn = String.valueOf(turn);
-			if (turn == 0) {
-				amount = 0;
+	public void setLevel(int[] status) {
+		lv = status[0];
+		name = name.replace("<n>", String.valueOf(lv));
+		for (int i = 1, l = status.length; i < l; i++) {
+			int x = status[i];
+			switch (i) {
+			case 1:
+				turn = x;
+				break;
+			case 2:
+				amount = x;
+				break;
 			}
 		}
 	}
 
+	//バトル中コンディション発現
+	/*
+	 * 毒、防御、デスマッチ、スライム状態
+	 * */
+	public void newCondition(Battle battle, Living living, List<ActionInfo> infos) {
+		newCondition();
+	}
+	//最初コンディション発現
+
+	public void newCondition(Living living) {
+		newCondition();
+	}
+
+	public void newCondition() {
+		if (turn < 0) {
+			turn = 0;
+			return;
+		}
+		if (0 < turn) {
+			return;
+		}
+		setTurn(1);
+		amount = 1;
+	}
+
+	//バトル中コンディション削除
+	/*
+	 * 死神の呪い,スライム状態、毒
+	 * */
+	public void removeCondition(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	public void removeCondition(Living living) {
+	}
+
+	//攻撃力補正
+	/**
+	 * バーサーク、バトルゴング、アサルトぺネトレイト、貫通
+	 */
+	public void attack(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//攻撃力補正
+	/*強攻撃強化
+	 */
+	public void criticalAttack(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//防御
+	/*
+	 * ディレイモード
+	 * */
+	public void defence(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//ためる時
+	/*ためる強化、
+	 */
+	public void tension(Battle battle, List<ActionInfo> infos) {
+	}
+
+	//ダメージ補正
+	/**
+	 * 小さな勇気
+	 */
+	public void damagePlus(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//受ける側ダメージ補正
+	/*
+	 * ダークアーマー
+	 * 
+	 * */
+	public void calcDamagePlus(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	/*
+	 * 防御、バリア、ネペントの消化液、手加減無効、強攻撃無効、ランタンフレイム、眼チャージ、纏った草
+	 * */
+	public void calcDamageMulti(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//ダメージを受けた後
+	/*ゴールドチャンス、ダメージ共有、暴走スイッチ、纏った草、気まぐれ、アサルトブースター、ディレイモード
+	 * */
+	public void setDamage(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	/*カウンター
+	 * */
+	public void counter(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//ディレイモード
+	public void delayMode(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//回復量補正
+	/*
+	 *回復封じ
+	 * */
+	public void calcHeal(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//回復時
+	/*
+	 * ヒールチャージ、
+	 * */
+	public void setHeal(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//吸収時
+	public void drain(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//アイテム使用時
+	/*アイテムヒール
+	 * */
+	public void useItem(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//バトル開始時
+	/*
+	 * 先制攻撃
+	 * */
+	public void battleStart(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//ターン開始時
+	/*
+	 * 
+	 * */
+	public void turnStart(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//モンスター行動時
+	/*
+	 * 挑発、偶数攻撃
+	 * */
+	public void monsterAction(Battle battle) {
+	}
+
+	//ゴールド消費時
+	/*
+	 * VIP状態
+	 * */
+	public void useGold(int gold) {
+	}
+
+	//ターン終了時
+	/*
+	 * 死神の呪い、トゲトゲ、アサルトブースター
+	 * */
+	public void turnEnd(Battle battle, Living living, List<ActionInfo> infos) {
+		if (turn == -1) {
+			return;
+		}
+		turn--;
+		if (turn == 0) {
+			removeCondition(battle, living, infos);
+		}
+	}
+
 	//死亡時
-	public void death(Battle battle, Living living, List<ActionInfo> infos, int n) {
+	/*
+	 * 根性
+	 */
+	public void death(Battle battle, Living living, List<ActionInfo> infos) {
+	}
+
+	//死亡時
+	/*
+	 * 執念、強い執念、おすそ分け
+	 */
+	public void hpZero(Battle battle, Living living, List<ActionInfo> infos) {
 	}
 
 	public int getId() {
 		return id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -112,7 +231,7 @@ public abstract class Condition {
 		return amount;
 	}
 
-	public String getTurn() {
+	public int getTurn() {
 		return turn;
 	}
 
@@ -120,43 +239,56 @@ public abstract class Condition {
 		this.amount = amount;
 	}
 
-	public void plusAmount(Battle battle, Living living, List<ActionInfo> infos, int n) {
+	public void setNonDelete(boolean nonDelete) {
+		this.nonDelete = nonDelete;
+
+	}
+
+	public boolean nonDeleteIs() {
+		return nonDelete;
+
+	}
+
+	public boolean duplicationIs() {
+		return duplication;
+	}
+
+	public void plusAmount(Battle battle, Living living, List<ActionInfo> infos) {
+		amount++;
+	}
+
+	public void plusAmount(Battle battle, Living living) {
+		amount++;
+	}
+
+	public void minusCondition(Living living) {
+		amount--;
 		if (amount == 0) {
-			newCondition(battle, living, infos, n);
-		}
-		if (duplication) {
-			amount++;
+			living.getConditions().remove(this);
 		}
 	}
 
 	public void plusAmount(Living living) {
+		/*
 		if (amount == 0) {
 			newCondition(living);
-		}
-		if (duplication) {
-			amount++;
-		}
+		}*/
+		amount++;
+	}
+
+	public void plusAmount(int amount) {
+		this.amount += amount;
 	}
 
 	public void setInfinity() {
-		turn = "∞";
+		turn = -1;
 	}
 
-	public void setTurn(String turn) {
-		if (Objects.isNull(this.turn)) {
-			this.turn = turn;
-			return;
-		}
-		if (this.turn.equals("∞")) {
-			return;
-		}
-		//if (!duplication && amount == 0) {
+	public void setTurn(int turn) {
 		this.turn = turn;
 	}
 
-	public void remove() {
-		amount = 0;
-		turn = "0";
+	public int getLV() {
+		return lv;
 	}
-
 }

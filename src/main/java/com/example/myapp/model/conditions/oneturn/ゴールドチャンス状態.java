@@ -8,12 +8,8 @@ import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
 public class ゴールドチャンス状態 extends Condition {
-	
 	@Override
-	public void setDamage(Battle battle, Living living, List<ActionInfo> infos, int n) {
-		if(amount==0) {
-			return;
-		}
-		living.setGold(living.getGold() + infos.get(n).getDamage());
+	public void setDamage(Battle battle, Living living, List<ActionInfo> infos) {
+		living.setGold(living.getGold() + infos.get(0).getFinalNumber());
 	}
 }

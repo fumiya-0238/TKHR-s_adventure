@@ -1,5 +1,7 @@
 package com.example.myapp.model.conditions.infinity;
 
+import java.util.List;
+
 import com.example.myapp.model.Living;
 import com.example.myapp.model.conditions.Condition;
 import com.example.myapp.repository.ActionInfo;
@@ -10,8 +12,11 @@ public class ヴァンパイアの魂 extends Condition {
 	public void newCondition() {
 		// TODO 自動生成されたメソッド・スタブ
 		setInfinity();
+		amount = 0;
 	}
-	public void setDamage(Battle battle,Living living,ActionInfo info) {
-	setAmount(getAmount()+info.getDamage());
+
+	@Override
+	public void drain(Battle battle, Living living, List<ActionInfo> infos) {
+		amount += infos.get(0).getNumber();
 	}
 }

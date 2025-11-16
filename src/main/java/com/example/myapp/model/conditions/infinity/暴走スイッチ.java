@@ -10,13 +10,14 @@ import com.example.myapp.repository.Battle;
 
 public class 暴走スイッチ extends Condition {
 	@Override
-	public void newCondition(Battle battle, Living living) {
+	public void newCondition() {
 		// TODO 自動生成されたメソッド・スタブ
 		setInfinity();
+		amount = 1;
 	}
 
 	@Override
-	public void calcDamage(Battle battle, Living living, List<ActionInfo> infos, int n) {
+	public void calcDamage(Battle battle, Living living, List<ActionInfo> infos) {
 		if(amount==0) {
 			return;
 		}

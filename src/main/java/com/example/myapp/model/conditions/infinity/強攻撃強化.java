@@ -9,19 +9,20 @@ import com.example.myapp.repository.Battle;
 
 public class 強攻撃強化 extends Condition {
 	@Override
-	public void newCondition(Battle battle, Living living, List<ActionInfo> info, int n) {
+	public void newCondition(Battle battle, Living living, List<ActionInfo> infos) {
 		// TODO 自動生成されたメソッド・スタブ
 		setInfinity();
 	}
+
 	public void newCondition(Living living) {
 		setInfinity();
 		amount = 1;
 	}
+
 	@Override
-	public void criticalAttack(Battle battle, Living living, List<ActionInfo> info, int n) {
+	public void criticalAttack(Battle battle, Living living, List<ActionInfo> infos) {
 		// TODO 自動生成されたメソッド・スタブ
-		info.get(n).setDamage((int)(info.get(n).getDamage()*1.33334));
+		battle.conditionMessage(living, name);
+		infos.get(0).setNumber(infos.get(0).getNumber() * 2 / 1.5);
 	}
 }
-
-

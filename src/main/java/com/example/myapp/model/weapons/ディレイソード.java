@@ -6,7 +6,7 @@ import com.example.myapp.model.Player;
 public class ディレイソード extends Weapon {
 	@Override
 	public void equip(Player player) {
-		player.plusCondition(ConditionEnum.ディレイモード);
+		player.eternalCondition(ConditionEnum.ディレイモード);
 	}
 	@Override
 	public void takeOff(Player player) {

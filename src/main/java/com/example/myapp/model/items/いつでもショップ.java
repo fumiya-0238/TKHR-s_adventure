@@ -2,13 +2,14 @@ package com.example.myapp.model.items;
 
 import java.util.List;
 
+import com.example.myapp.creater.ConditionEnum;
 import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
-public class 上級火の玉 extends Item {
+public class いつでもショップ extends Item{
 	@Override
 	public void use(Battle battle, List<ActionInfo> infos) {
 		// TODO 自動生成されたメソッド・スタブ
-		battle.getCommonEffect().commonDamege(battle, battle.getMonster(), 8, true, infos);
+		battle.getPlayer().plusCondition(battle, infos, ConditionEnum.いつでもショップ);
 	}
 }

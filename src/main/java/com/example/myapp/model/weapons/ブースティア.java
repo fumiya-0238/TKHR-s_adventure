@@ -6,7 +6,7 @@ import com.example.myapp.model.Player;
 public class ブースティア extends Weapon {
 	@Override
 	public void equip(Player player) {
-		player.plusCondition(ConditionEnum.ブーストUP強化);
+		player.eternalCondition(ConditionEnum.ブーストUP強化);
 	}
 	@Override
 	public void takeOff(Player player) {

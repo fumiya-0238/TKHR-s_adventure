@@ -11,7 +11,6 @@ public class アクセラレイバー extends Weapon {
 	public void battleStart(Battle battle, List<ActionInfo> infos) {
 		Player player = battle.getPlayer();
 		int playerAttack = player.getAttack() - attack + battle.getFloor();
-		System.out.println(playerAttack);
 		attack = battle.getFloor();
 		player.setAttack(playerAttack);
 	}

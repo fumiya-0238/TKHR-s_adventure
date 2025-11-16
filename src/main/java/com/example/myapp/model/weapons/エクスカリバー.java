@@ -7,43 +7,37 @@ import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
 public class エクスカリバー extends Weapon {
-	@Override
-	public void attack(Battle battle, List<ActionInfo> infos, int n) {
-		super.attack(battle, infos, n);
+	private void exGet(Battle battle) {
 		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
 		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(7));
 	}
 
 	@Override
-	public void weekAttack(Battle battle, List<ActionInfo> infos, int n) {
-		super.weekAttack(battle, infos, n);
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
+	public int attack(Battle battle, List<ActionInfo> infos) {
+		exGet(battle);
+		return 0;
 	}
 
 	@Override
-	public void criticalAttack(Battle battle, List<ActionInfo> infos, int n) {
-		super.criticalAttack(battle, infos, n);
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
+	public int weekAttack(Battle battle, List<ActionInfo> infos) {
+		exGet(battle);
+		return 0;
 	}
 
 	@Override
-	public void defence(Battle battle, List<ActionInfo> infos, int n) {
-		super.defence(battle, infos, n);
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
+	public int criticalAttack(Battle battle, List<ActionInfo> infos) {
+		exGet(battle);
+		return 0;
 	}
 
 	@Override
-	public void tension(Battle battle, List<ActionInfo> infos, int n) {
-		super.tension(battle, infos, n);
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(3));
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(5));
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(18));
+	public void defence(Battle battle, List<ActionInfo> infos) {
+		exGet(battle);
+	}
+
+	@Override
+	public void tension(Battle battle, List<ActionInfo> infos) {
+		exGet(battle);
 	}
 }

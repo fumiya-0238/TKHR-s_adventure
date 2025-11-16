@@ -1,27 +1,25 @@
 package com.example.myapp.model;
 
-public enum Difficulty {
-	BEGINNER("beginner", "初級", 1), NOVICE("novice", "中級", 5), EXPERT("expert", "上級", 10);
-	
-	private String sql;
-	private String name;
-	private int lv;
+public class Difficulty {
+	private String logicalName;
+	private String physicalName;
+	private int startLV;
 
-	private Difficulty(String sql, String name, int lv) {
-		this.sql = sql;
-		this.name = name;
-		this.lv = lv;
+	public Difficulty(String physicalName, String logicalName, int startLV) {
+		this.logicalName = logicalName;
+		this.physicalName = physicalName;
+		this.startLV = startLV;
 	}
-	
-	public String getSql() {
-		return sql;
+
+	public String getLogicalName() {
+		return logicalName;
 	}
-	
-	public String getName() {
-		return name;
+
+	public String getPhysicalName() {
+		return physicalName;
 	}
 
 	public int getLv() {
-		return lv;
+		return startLV;
 	}
 }

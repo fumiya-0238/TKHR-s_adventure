@@ -7,10 +7,8 @@ import com.example.myapp.repository.Battle;
 
 public class ダメージ草 extends Item {
 	@Override
-	public void use(Battle battle, List<ActionInfo> infos, int n) {
+	public void use(Battle battle, List<ActionInfo> infos) {
 		// TODO 自動生成されたメソッド・スタブ
-		infos.get(n).setDamage(10);
-		battle.getPlayer().calcDamage(battle, infos, n);
+		battle.getCommonEffect().commonDamege(battle, battle.getPlayer(), 10, true, infos);
 	}
-
 }

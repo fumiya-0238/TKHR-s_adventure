@@ -9,8 +9,8 @@ import com.example.myapp.repository.Battle;
 public class ゴールドチャンス extends Item {
 
 	@Override
-	public void use(Battle battle, List<ActionInfo> infos, int n) {
+	public void use(Battle battle, List<ActionInfo> infos) {
 		// TODO 自動生成されたメソッド・スタブ
-		battle.getMonster().plusCondition(battle,infos,n,ConditionEnum.ゴールドチャレンジ);
+		battle.getMonster().plusCondition(battle, infos, ConditionEnum.ゴールドチャンス);
 	}
 }

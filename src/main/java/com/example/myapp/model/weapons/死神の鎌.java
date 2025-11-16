@@ -8,7 +8,8 @@ import com.example.myapp.repository.Battle;
 
 public class 死神の鎌 extends Weapon {
 	@Override
-	public void criticalAttack(Battle battle, List<ActionInfo> infos, int n) {
-		battle.getPlayer().plusCondition(ConditionEnum.死神の呪い);
+	public int criticalAttack(Battle battle, List<ActionInfo> infos) {
+		battle.getMonster().plusCondition(ConditionEnum.死神の呪い);
+		return super.criticalAttack(battle, infos);
 	}
 }

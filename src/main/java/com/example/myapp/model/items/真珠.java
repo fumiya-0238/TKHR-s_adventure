@@ -8,8 +8,8 @@ import com.example.myapp.repository.Battle;
 
 public class 真珠 extends Item {
 	@Override
-	public void use(Battle battle, List<ActionInfo> infos, int n) {
+	public void use(Battle battle, List<ActionInfo> infos) {
 		// TODO 自動生成されたメソッド・スタブ
-		battle.getMonster().plusCondition(battle, infos, n, ConditionEnum.真珠);
+		battle.getPlayer().plusCondition(battle, infos, ConditionEnum.真珠);
 	}
 }

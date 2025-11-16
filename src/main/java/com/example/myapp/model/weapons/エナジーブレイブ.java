@@ -6,7 +6,7 @@ import com.example.myapp.model.Player;
 public class エナジーブレイブ extends Weapon {
 	@Override
 	public void equip(Player player) {
-		player.plusCondition(ConditionEnum.ヒールチャージ);
+		player.eternalCondition(ConditionEnum.ヒールチャージ);
 	}
 
 	@Override

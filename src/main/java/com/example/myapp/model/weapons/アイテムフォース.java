@@ -13,21 +13,15 @@ public class アイテムフォース extends Weapon {
 	public void battleStart(Battle battle,List<ActionInfo> infos) {
 		ActionInfo info = new ActionInfo();
 		info.addMessages("挑発を手に入れた");
-		infos.add(info);
-		battle.getPlayer().setItem(CreateItem.INSTANCE.create(8));
-	}
-
-	@Override
-	public void turnStart(Battle battle,List<ActionInfo> infos) {
-		ActionInfo info = new ActionInfo();
 		info.addMessages("ゴールドチャンスを手に入れた");
 		infos.add(info);
+		battle.getPlayer().setItem(CreateItem.INSTANCE.create(8));
 		battle.getPlayer().setItem(CreateItem.INSTANCE.create(19));
 	}
 
 	@Override
 	public void equip(Player player) {
-		player.plusCondition(ConditionEnum.アイテムヒール);
+		player.eternalCondition(ConditionEnum.アイテムヒール);
 	}
 
 	@Override

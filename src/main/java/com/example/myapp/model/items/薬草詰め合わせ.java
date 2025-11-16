@@ -9,7 +9,7 @@ import com.example.myapp.repository.Battle;
 
 public class 薬草詰め合わせ extends Item{
 	@Override
-	public void use(Battle battle, List<ActionInfo> info, int n) {
+	public void use(Battle battle, List<ActionInfo> info) {
 		// TODO 自動生成されたメソッド・スタブ
 		Player player = battle.getPlayer();
 		for (int j = 0, l = player.getMaxItem() - player.getItems().size(); j <= l; j++) {

@@ -7,41 +7,42 @@ import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
 public class 天使の剣 extends Weapon {
-	private void angelHeal(Battle battle, List<ActionInfo> infos, int n) {
+	private void angelHeal(Battle battle, List<ActionInfo> infos) {
 		Player player = battle.getPlayer();
-		infos.add(new ActionInfo());
-		int size = infos.size() - 1;
-		infos.get(size).setDamage(player.getMAXHP() / 10);
-		player.calcHeal(battle, infos, size);
+		ActionInfo info = new ActionInfo();
+		info.setReceiver(player);
+		info.setActionType(2);
+		info.setNumber(player.getMAXHP() / 10);
+		infos.add(0,info);
 	}
 
 	@Override
-	public void attack(Battle battle, List<ActionInfo> infos, int n) {
-		super.attack(battle, infos, n);
-		angelHeal(battle, infos, n);
+	public int attack(Battle battle, List<ActionInfo> infos) {
+		angelHeal(battle, infos);
+		return super.attack(battle, infos);
 	}
 
 	@Override
-	public void weekAttack(Battle battle, List<ActionInfo> infos, int n) {
-		super.weekAttack(battle, infos, n);
-		angelHeal(battle, infos, n);
+	public int weekAttack(Battle battle, List<ActionInfo> infos) {
+		angelHeal(battle, infos);
+		return super.weekAttack(battle, infos);
 	}
 
 	@Override
-	public void criticalAttack(Battle battle, List<ActionInfo> infos, int n) {
-		super.criticalAttack(battle, infos, n);
-		angelHeal(battle, infos, n);
+	public int criticalAttack(Battle battle, List<ActionInfo> infos) {
+		angelHeal(battle, infos);
+		return super.criticalAttack(battle, infos);
 	}
 
 	@Override
-	public void defence(Battle battle, List<ActionInfo> infos, int n) {
-		super.defence(battle, infos, n);
-		angelHeal(battle, infos, n);
+	public void defence(Battle battle, List<ActionInfo> infos) {
+		super.defence(battle, infos);
+		angelHeal(battle, infos);
 	}
 
 	@Override
-	public void tension(Battle battle, List<ActionInfo> infos, int n) {
-		super.tension(battle, infos, n);
-		angelHeal(battle, infos, n);
+	public void tension(Battle battle, List<ActionInfo> infos) {
+		super.tension(battle, infos);
+		angelHeal(battle, infos);
 	}
 }

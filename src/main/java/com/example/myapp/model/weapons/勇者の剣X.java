@@ -10,13 +10,13 @@ import com.example.myapp.repository.Battle;
 public class 勇者の剣X extends Weapon {
 	@Override
 	public void equip(Player player) {
-		player.plusCondition(ConditionEnum.ためる強化);
+		player.eternalCondition(ConditionEnum.ためる強化);
 		player.plusDefaultCritical(1);
 	}
 
 	@Override
 	public void takeOff(Player player) {
-		player.removeCondition(ConditionEnum.ためる強化);
+		player.minusCondition(ConditionEnum.ためる強化);
 		player.plusDefaultCritical(-1);
 	}
 

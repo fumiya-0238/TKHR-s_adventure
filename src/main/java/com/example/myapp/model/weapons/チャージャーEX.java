@@ -10,18 +10,18 @@ import com.example.myapp.repository.Battle;
 
 public class チャージャーEX extends Weapon {
 	@Override
-	public void tension(Battle battle, List<ActionInfo> infos, int n) {
-		super.tension(battle, infos, n);
+	public void tension(Battle battle, List<ActionInfo> infos) {
+		super.tension(battle, infos);
 		battle.getPlayer().setItem(CreateItem.INSTANCE.create(4));
 	}
 
 	@Override
 	public void equip(Player player) {
-		player.plusCondition(ConditionEnum.ためる強化);
+		player.eternalCondition(ConditionEnum.ためる強化);
 	}
 
 	@Override
 	public void takeOff(Player player) {
-		player.removeCondition(ConditionEnum.ためる強化);
+		player.minusCondition(ConditionEnum.ためる強化);
 	}
 }

@@ -6,11 +6,11 @@ import com.example.myapp.model.Player;
 public class 強強剣 extends Weapon {
 	@Override
 	public void equip(Player player) {
-		player.plusCondition(ConditionEnum.強攻撃強化);
+		player.eternalCondition(ConditionEnum.強攻撃強化);
 	}
 
 	@Override
 	public void takeOff(Player player) {
-		player.removeCondition(ConditionEnum.強攻撃強化);
+		player.minusCondition(ConditionEnum.強攻撃強化);
 	}
 }

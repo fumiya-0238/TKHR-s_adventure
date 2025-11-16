@@ -11,19 +11,15 @@ public abstract class Item {
 	protected String name;
 	protected int price;
 	protected boolean active;
-	private List<String> relateds;
 
 	public void setStatus(int id, String name, int price) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 	}
-	
-	public abstract void use(Battle battle, List<ActionInfo> infos, int n);
-	protected void commonUse(ActionInfo info) {
-		info.addMessages("プレイヤーは"+name+"を使った");
-	}
-	
+
+	public abstract void use(Battle battle, List<ActionInfo> infos);
+
 	public int getId() {
 		return id;
 	}
@@ -36,6 +32,8 @@ public abstract class Item {
 		return name;
 	}
 
+	public void turnStart(Battle battle, List<ActionInfo> infos) {
+	}
 
 	public boolean getActive() {
 		return active;

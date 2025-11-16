@@ -4,10 +4,10 @@ package com.example.myapp.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.myapp.creater.ConditionEnum;
 import com.example.myapp.creater.CreateWeapon;
 import com.example.myapp.model.conditions.Condition;
 import com.example.myapp.model.items.Item;
-import com.example.myapp.model.items.SubscriptionItem;
 import com.example.myapp.model.weapons.Weapon;
 import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
@@ -19,24 +19,31 @@ public class Player extends Living {
 	private List<Item> items;
 	private List<Weapon> weapons;
 	private int tension;
-	private int exp;
 	private int sumExp;
 	private int defaultCritical;
 	private int critical;
 	private int action;
-	final private int maxItem = 20;
+	private int maxItem = 20;
 	private int boost;
-	private int plusBoost = 2;
+	private int plusBoost = 0;
+	private int multiBoost = 1;
+	private double priceMulti;
 	private boolean boostOn;
+	private int bonus;
+	private List<Boolean> commandClickFlags;
 
 	public Player() {
 		name = "プレイヤー";
 		items = new ArrayList<>();
 		weapons = new ArrayList<>();
+		commandClickFlags = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			commandClickFlags.add(true);
+		}
 	}
-	
+
 	public void resetStatus() {
-		weapons.add(CreateWeapon.INSTANCE.create(1));
+		weaponReset();
 		int maxHp = lv * 2 + 8;
 		setAttack(lv + 1);
 		setEXP(lv * 2 - 1);
@@ -47,132 +54,355 @@ public class Player extends Living {
 		setBoost(0);
 		boostOn = false;
 		items.clear();
+		Battle.addLogs(new ScreenChange(ScreenEnum.毒が回復, ""));
 		conditions.clear();
-		setHP(maxHp);
 		setMAXHP(maxHp);
+		setHP(maxHp);
 		setSumEXP(0);
-		equip(CreateWeapon.INSTANCE.create(28));
-		equipSubWeapon(CreateWeapon.INSTANCE.create(24));
+		plusBoost = 0;
+		multiBoost = 1;
+		priceMulti = 1;
+		attackMulti = 1;
+		attackPlus = 0;
+		clearCommands();
+		equip(CreateWeapon.INSTANCE.create(27));
+		equipSubWeapon(CreateWeapon.INSTANCE.create(12));
+		//setItem(CreateItem.INSTANCE.create(32));
+		//equip(CreateWeapon.INSTANCE.create(32));
 		/*
-		setItem(CreateItem.INSTANCE.create(1));
-		setItem(CreateItem.INSTANCE.create(2));
-		setItem(CreateItem.INSTANCE.create(4));
-		setItem(CreateItem.INSTANCE.create(5));
-		setItem(CreateItem.INSTANCE.create(8));
-		setItem(CreateItem.INSTANCE.create(13));
-		setItem(CreateItem.INSTANCE.create(14));
-		setItem(CreateItem.INSTANCE.create(11));
-		setItem(CreateItem.INSTANCE.create(15));
-		setItem(CreateItem.INSTANCE.create(17));
-		setItem(CreateItem.INSTANCE.create(28));
-		setItem(CreateItem.INSTANCE.create(30));
-		setItem(CreateItem.INSTANCE.create(9));
-		setItem(CreateItem.INSTANCE.create(24));
+		
+		equipSubWeapon(CreateWeapon.INSTANCE.create(22));
+		//equip(CreateWeapon.INSTANCE.create(2));
 		setItem(CreateItem.INSTANCE.create(26));
-		setItem(CreateItem.INSTANCE.create(18));
-		setItem(CreateItem.INSTANCE.create(20));
-		setItem(CreateItem.INSTANCE.create(27));
-		setItem(CreateItem.INSTANCE.create(31));
-		setItem(CreateItem.INSTANCE.create(32));*/
-	}
-	private void commonAction(Battle battle, List<ActionInfo> infos, int n) {
-		for (int i = n; i <= n; i++) {
-			ActionInfo info = infos.get(i);
-			if (info.getAttackIs()) {
-				info.getLiving().calcDamage(battle, infos, i);
-			} else if (0 < info.getDamage()) {
-				info.getLiving().calcHeal(battle, infos, i);
-			}
-		}
-		Battle.addLogs(new ScreenChange(ScreenEnum.ストップ, ""));
+		setItem(CreateItem.INSTANCE.create(12));
+		setItem(CreateItem.INSTANCE.create(12));
+		setItem(CreateItem.INSTANCE.create(12));
+		setItem(CreateItem.INSTANCE.create(12));
+		setItem(CreateItem.INSTANCE.create(12));
+		setItem(CreateItem.INSTANCE.create(26));
+		setItem(CreateItem.INSTANCE.create(16));
+		setItem(CreateItem.INSTANCE.create(16));
+		setItem(CreateItem.INSTANCE.create(16));*/
+
 	}
 
-	public void attack(Battle battle, List<ActionInfo> infos, int n) {
-		ActionInfo info = new ActionInfo();
-		info.setLiving(battle.getMonster());
-		info.addMessages("プレイヤーは攻撃をした");
-		infos.add(info);
-		for (Condition condition : conditions) {
-			condition.attack(battle, this, infos, n);
+	public void attack(Battle battle, List<ActionInfo> infos) {
+		if (boostOn) {
+			boostAttack(battle, infos);
+			return;
 		}
+		plusBoost(finalBoostPlus());
+		List<ActionInfo> attackInfos = new ArrayList<>();
+		ActionInfo info = new ActionInfo();
+		int attack = getFinalAttack();
+		info.setAttacker(this);
+		info.setReceiver(battle.getMonster());
+		String message = "プレイヤーは攻撃をした";
+		info.addMessages(message);
+		info.setActionType(4);
+		attackInfos.add(info);
+		for (Weapon weapon : weapons) {
+			attack += weapon.attack(battle, attackInfos);
+
+		}
+		double tension = 1.0 + ((double) this.tension / 100);
+		resetTension();
+		info.setNumber((int) (attack * tension));
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		Battle.addLogs(new ScreenChange(ScreenEnum.攻撃エフェクト, ""));
+		for (Condition condition : conditions) {
+			condition.attack(battle, this, attackInfos);
+		}
+		for (Condition condition : conditions) {
+			condition.damagePlus(battle, this, attackInfos);
+		}
+		infos.addAll(attackInfos);
+
+		battle.commonAction(infos);
+	}
+
+	public void weekAttack(Battle battle, List<ActionInfo> infos) {
+		if (boostOn) {
+			boostWeekAttack(battle, infos);
+			return;
+		}
+		plusBoost(finalBoostPlus());
+		List<ActionInfo> attackInfos = new ArrayList<>();
+		ActionInfo info = new ActionInfo();
+		int attack = getFinalAttack();
+		info.setAttacker(this);
+		info.setReceiver(battle.getMonster());
+		info.setActionType(4);
+		String message = "プレイヤーは手加減攻撃をした";
+		info.addMessages(message);
+		attackInfos.add(info);
+		for (Weapon weapon : weapons) {
+			attack += weapon.weekAttack(battle, attackInfos);
+		}
+		info.setNumber(attack - 1);
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		Battle.addLogs(new ScreenChange(ScreenEnum.攻撃エフェクト, ""));
+
+		for (Condition condition : conditions) {
+			condition.attack(battle, this, attackInfos);
+		}
+		for (Condition condition : conditions) {
+			condition.damagePlus(battle, this, attackInfos);
+		}
+		infos.addAll(attackInfos);
+		battle.commonAction(infos);
+	}
+
+	public void criticalAttack(Battle battle, List<ActionInfo> infos) {
+		if (boostOn) {
+			boostCriticalAttack(battle, infos);
+			return;
+		}
+		plusBoost(finalBoostPlus());
+		double tension = 1.0 + ((double) this.tension / 100);
+		plusCritical(-1);
+		List<ActionInfo> attackInfos = new ArrayList<>();
+		ActionInfo info = new ActionInfo();
+		double attack = getFinalAttack();
+		info.setAttacker(this);
+		info.setReceiver(battle.getMonster());
+		info.setActionType(4);
+		String message = "プレイヤーは強攻撃をした";
+		info.addMessages(message);
+		attackInfos.add(info);
+		for (Weapon weapon : weapons) {
+			attack += weapon.criticalAttack(battle, attackInfos);
+		}
+		attack = attack * 1.5;
+		info.setNumber(attack * tension);
+		resetTension();
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		Battle.addLogs(new ScreenChange(ScreenEnum.攻撃エフェクト, ""));
+
+		for (Condition condition : conditions) {
+			condition.attack(battle, this, attackInfos);
+		}
+		for (Condition condition : conditions) {
+			condition.criticalAttack(battle, this, attackInfos);
+		}
+		for (Condition condition : conditions) {
+			condition.damagePlus(battle, this, attackInfos);
+		}
+
+		resetTension();
+		infos.addAll(attackInfos);
+		battle.commonAction(infos);
+	}
+
+	public void defence(Battle battle, List<ActionInfo> infos) {
+		if (boostOn) {
+			boostDefence(battle, infos);
+			return;
+		}
+		plusBoost(finalBoostPlus());
+		List<ActionInfo> defenceInfos = new ArrayList<>();
+		ActionInfo info = new ActionInfo();
+		String message = "プレイヤーは防御をした";
+		info.addMessages(message);
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		defenceInfos.add(info);
+		plusCondition(battle, defenceInfos, ConditionEnum.防御);
+		for (Weapon weapon : weapons) {
+			weapon.defence(battle, defenceInfos);
+		}
+
+		for (Condition condition : conditions) {
+			condition.defence(battle, this, defenceInfos);
+		}
+
+		infos.addAll(defenceInfos);
+		Battle.addLogs(new ScreenChange(ScreenEnum.防御ウェイト, ""));
+		battle.commonAction(infos);
+
+	}
+
+	public void tension(Battle battle, List<ActionInfo> infos) {
+		if (boostOn) {
+			boostTension(battle, infos);
+			return;
+		}
+		plusBoost(finalBoostPlus());
+		List<ActionInfo> tensionInfos = new ArrayList<>();
+		ActionInfo info = new ActionInfo();
+		info.setNumber(25);
+		info.setActionType(3);
+		String message = "プレイヤーは気合をためた";
+		info.addMessages(message);
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		tensionInfos.add(info);
+		for (Weapon weapon : weapons) {
+			weapon.tension(battle, tensionInfos);
+		}
+		for (Condition condition : conditions) {
+			condition.tension(battle, tensionInfos);
+		}
+		infos.addAll(tensionInfos);
+		Battle.addLogs(new ScreenChange(ScreenEnum.防御ウェイト, ""));
+		battle.commonAction(infos);
+	}
+
+	public void boostAttack(Battle battle, List<ActionInfo> infos) {
+		Battle.addLogs(new ScreenChange(ScreenEnum.ブーストオフ, ""));
+		double tension = 1.0 + ((double) this.tension / 100);
+		setBoost(0);
+		boostOn = false;
+		List<ActionInfo> attackInfos = new ArrayList<>();
+		int[] status = { 0, -1 };
+		plusCondition(battle, attackInfos, ConditionEnum.貫通, status);
+		ActionInfo info = new ActionInfo();
+		int attack = getFinalAttack();
+		info.setAttacker(this);
+		info.setReceiver(battle.getMonster());
+		String message = "プレイヤーは攻撃をした";
+		info.addMessages(message);
+		info.setActionType(4);
+		attackInfos.add(info);
+		for (Weapon weapon : weapons) {
+			attack += weapon.attack(battle, attackInfos);
+
+		}
+		resetTension();
+		info.setNumber(attack * 1.5 * tension);
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		Battle.addLogs(new ScreenChange(ScreenEnum.攻撃エフェクト, ""));
+		for (Condition condition : conditions) {
+			condition.attack(battle, this, attackInfos);
+		}
+		for (Condition condition : conditions) {
+			condition.damagePlus(battle, this, attackInfos);
+		}
+		infos.addAll(attackInfos);
+
+		battle.commonAction(infos);
+	}
+
+	public void boostWeekAttack(Battle battle, List<ActionInfo> infos) {
+		Battle.addLogs(new ScreenChange(ScreenEnum.ブーストオフ, ""));
+		double tension = 1.0 + ((double) this.tension / 100);
+		setBoost(0);
+		List<ActionInfo> attackInfos = new ArrayList<>();
+		ActionInfo info = new ActionInfo();
+		int attack = getFinalAttack();
+		info.setAttacker(this);
+		info.setReceiver(battle.getMonster());
+		info.setActionType(4);
+		String message = "プレイヤーは手加減攻撃をした";
+		info.addMessages(message);
+		attackInfos.add(info);
+		for (Weapon weapon : weapons) {
+			attack += weapon.weekAttack(battle, attackInfos);
+		}
+		info.setNumber((attack - 1) * tension);
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		Battle.addLogs(new ScreenChange(ScreenEnum.攻撃エフェクト, ""));
+
+		for (Condition condition : conditions) {
+			condition.attack(battle, this, attackInfos);
+		}
+		for (Condition condition : conditions) {
+			condition.damagePlus(battle, this, attackInfos);
+		}
+		infos.addAll(attackInfos);
+		battle.commonAction(infos);
+	}
+
+	public void boostCriticalAttack(Battle battle, List<ActionInfo> infos) {
+		Battle.addLogs(new ScreenChange(ScreenEnum.ブーストオフ, ""));
+		double tension = 1.0 + ((double) this.tension / 100);
+		setBoost(0);
+		boostOn = false;
+		plusCritical(-1);
+		List<ActionInfo> attackInfos = new ArrayList<>();
+		ActionInfo info = new ActionInfo();
+		double attack = getFinalAttack();
+		info.setAttacker(this);
+		info.setReceiver(battle.getMonster());
+		info.setActionType(4);
+		String message = "プレイヤーは強攻撃をした";
+		info.addMessages(message);
+		attackInfos.add(info);
+		for (Weapon weapon : weapons) {
+			attack += weapon.criticalAttack(battle, attackInfos);
+		}
+
+		info.setNumber(attack * 2 * tension);
+		resetTension();
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		Battle.addLogs(new ScreenChange(ScreenEnum.攻撃エフェクト, ""));
+
+		for (Condition condition : conditions) {
+			condition.attack(battle, this, attackInfos);
+		}
+		for (Condition condition : conditions) {
+			condition.criticalAttack(battle, this, attackInfos);
+		}
+		for (Condition condition : conditions) {
+			condition.damagePlus(battle, this, attackInfos);
+		}
+
+		resetTension();
+		infos.addAll(attackInfos);
+		battle.commonAction(infos);
+	}
+
+	public void boostDefence(Battle battle, List<ActionInfo> infos) {
+		Battle.addLogs(new ScreenChange(ScreenEnum.ブーストオフ, ""));
+		setBoost(0);
+		boostOn = false;
+		List<ActionInfo> defenceInfos = new ArrayList<>();
+		ActionInfo info = new ActionInfo();
+		String message = "プレイヤーは防御をした";
+		info.addMessages(message);
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		defenceInfos.add(info);
+		int[] status = { 1, 1 };
+		plusCondition(battle, defenceInfos, ConditionEnum.防御, status);
 
 		for (Weapon weapon : weapons) {
-			weapon.attack(battle, infos, n);
+			weapon.defence(battle, defenceInfos);
 		}
 
 		for (Condition condition : conditions) {
-			condition.damagePlus(battle, this, infos, n);
+			condition.defence(battle, this, defenceInfos);
 		}
-		commonAction(battle, infos, n);
+
+		infos.addAll(defenceInfos);
+		Battle.addLogs(new ScreenChange(ScreenEnum.防御ウェイト, ""));
+		battle.commonAction(infos);
+
 	}
 
-	public void weekAttack(Battle battle, List<ActionInfo> infos, int n) {
+	public void boostTension(Battle battle, List<ActionInfo> infos) {
+		Battle.addLogs(new ScreenChange(ScreenEnum.ブーストオフ, ""));
+		setBoost(0);
+		boostOn = false;
+		List<ActionInfo> tensionInfos = new ArrayList<>();
 		ActionInfo info = new ActionInfo();
-		info.setLiving(battle.getMonster());
-		info.addMessages("プレイヤーは手加減攻撃をした");
-		infos.add(info);
-		//attackMulti
-		//attackPlus
-		for (Condition condition : conditions) {
-			condition.attack(battle, this, infos, n);
-		}
+		info.setNumber(100);
+		info.setActionType(3);
+		String message = "プレイヤーは気合をためた";
+		info.addMessages(message);
+		Battle.addLogs(new ScreenChange(ScreenEnum.ウィンドウメッセージ, message));
+		tensionInfos.add(info);
 		for (Weapon weapon : weapons) {
-			weapon.weekAttack(battle, infos, n);
+			weapon.tension(battle, tensionInfos);
 		}
 		for (Condition condition : conditions) {
-			condition.damagePlus(battle, this, infos, n);
+			condition.tension(battle, tensionInfos);
 		}
-		commonAction(battle, infos, n);
-	}
-
-	public void criticalAttack(Battle battle, List<ActionInfo> infos, int n) {
-		ActionInfo info = new ActionInfo();
-		info.setLiving(battle.getMonster());
-		info.addMessages("プレイヤーは強攻撃をした");
-		infos.add(info);
-		for (Condition condition : conditions) {
-			condition.attack(battle, this, infos, n);
-		}
-		for (Weapon weapon : weapons) {
-			weapon.criticalAttack(battle, infos, n);
-		}
-		for (Condition condition : conditions) {
-			condition.criticalAttack(battle, this, infos, n);
-		}
-		for (Condition condition : conditions) {
-			condition.damagePlus(battle, this, infos, n);
-		}
-		commonAction(battle, infos, n);
-	}
-
-	public void defence(Battle battle, List<ActionInfo> infos, int n) {
-		ActionInfo info = new ActionInfo();
-		info.setLiving(battle.getMonster());
-		info.addMessages("プレイヤーは防御をした");
-		infos.add(info);
-		for (Weapon weapon : weapons) {
-			weapon.defence(battle, infos, n);
-		}
-		commonAction(battle, infos, n);
-	}
-
-	public void tension(Battle battle, List<ActionInfo> infos, int n) {
-		ActionInfo info = new ActionInfo();
-		info.setLiving(battle.getMonster());
-		info.addMessages("プレイヤーは気合をためた");
-		infos.add(info);
-		for (Weapon weapon : weapons) {
-			weapon.tension(battle, infos, n);
-		}
-		commonAction(battle, infos, n);
+		infos.addAll(tensionInfos);
+		Battle.addLogs(new ScreenChange(ScreenEnum.防御ウェイト, ""));
+		battle.commonAction(infos);
 	}
 
 	@Override
-	public void death(Battle battle, List<ActionInfo> infos, int n) {
+	public void death(Battle battle, List<ActionInfo> infos) {
 		// TODO 自動生成されたメソッド・スタブ
-		for (Condition condition : conditions) {
-			condition.death(battle, this, infos, n);
-		}
 		if (hp == 0) {
 			Battle.addLogs(new ScreenChange(ScreenEnum.ゲームオーバー, ""));
 		}
@@ -182,10 +412,6 @@ public class Player extends Living {
 		boostOn = !boostOn;
 	}
 
-	public void turnEnd() {
-
-	}
-
 	public void setItem(Item item) {
 		if (items.size() < maxItem) {
 			items.add(item);
@@ -193,20 +419,19 @@ public class Player extends Living {
 		}
 	}
 
-	public void removeItem(Battle battle, int i) {
-		if (items.get(i) instanceof SubscriptionItem) {
-			((SubscriptionItem) items.get(i)).cancel(battle);
-		}
+	public void removeItem(int i) {
 		items.remove(i);
 		Battle.addLogs(new ScreenChange(ScreenEnum.アイテム削除, String.valueOf(i)));
 	}
-	/*public String setTension(int tension) {
-		this.tension += tension;
-		if (this.tension < 100) {
-			this.tension += tension;
+
+	public void removeItem(Item item) {
+		for (int i = 0, l = items.size(); i < l; i++) {
+			if (items.get(i) == item) {
+				removeItem(i);
+				break;
+			}
 		}
-		return "気合が" + tension + "になった。";
-	}*/
+	}
 
 	public void levelUp() {
 		lv++;
@@ -214,7 +439,7 @@ public class Player extends Living {
 		maxHp += 2;
 		attack++;
 		exp += lv * 2 - 1;
-		if (exp < 1) {
+		if (exp <= 0) {
 			levelUp();
 		}
 	}
@@ -226,19 +451,34 @@ public class Player extends Living {
 				attack -= takedWeapon.getAttack();
 			}
 		}
+		int x = descSearchItem(32);
+		if (x != -1) {
+			int weaponId1 = weapons.get(0).getId();
+			int weaponId2 = weapon.getId();
+			if ((weaponId1 == 26 && weaponId2 == 27) || (weaponId1 == 27 && weaponId2 == 26)) {
+				weapon = CreateWeapon.INSTANCE.create(31);
+				removeItem(x);
+			}
+		}
+
 		weapons.clear();
 		weapon.equip(this);
 		weapons.add(weapon);
 		setAttack(attack + weapon.getAttack());
 		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤー武器, String.valueOf(weapon.getName())));
 		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーサブ武器, ""));
-		//Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤー武器攻撃力, String.valueOf(weapon.getAttack())));
-		
 	}
 
 	public void equipSubWeapon(Weapon weapon) {
 		weapon.equip(this);
-		weapons.add(weapon);
+		int size = weapons.size();
+		if (size == 1) {
+			weapons.add(weapon);
+		} else {
+			weapons.get(1).takeOff(this);
+			weapons.set(1, weapon);
+		}
+
 		weapon.setAttack(0);
 		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーサブ武器, String.valueOf(weapon.getName())));
 	}
@@ -248,34 +488,81 @@ public class Player extends Living {
 			return;
 		}
 		double bonus = 1.0;
+
+		int b = 0;
 		if (turn && over) {
-			bonus = 1.5;
+			b = 2;
 		} else if (turn || over) {
+			b = 1;
+		}
+		b += amountCondition(ConditionEnum.真珠);
+		b += amountCondition(ConditionEnum.スライム状態);
+
+		if (2 <= b) {
+			bonus = 1.5;
+			b = 2;
+		} else if (b == 1) {
 			bonus = 1.3;
 		}
 		EXP = (int) (EXP * bonus);
 		Gold = (int) (Gold * bonus);
 		this.gold += Gold;
-		plusSumEXP(EXP);
 		this.sumExp += EXP;
 		this.exp -= EXP;
-		if (this.exp < 1) {
+		boolean levelFlag = false;
+		if (this.exp <= 0) {
 			levelUp();
+			levelFlag = true;
 		}
 		setLV(lv);
 		setHP(hp);
 		setMAXHP(maxHp);
 		setAttack(attack);
-		setEXP(exp);
+		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤー経験値, String.valueOf(exp)));
+		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤー合計経験値, String.valueOf(sumExp)));
+		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーお金, String.valueOf(gold)));
+
+		Battle.addLogs(new ScreenChange(ScreenEnum.リザルト, String.valueOf(EXP) + "#" + String.valueOf(Gold) + "#" + b));
+		if (levelFlag) {
+			Battle.addLogs(new ScreenChange(ScreenEnum.レベルアップメッセージ, String.valueOf(lv)));
+		}
+		Battle.addLogs(new ScreenChange(ScreenEnum.ストップ, ""));
 	}
 
-	public Item descSearchItem(String name) {
-		for (int i = items.size() - 1; i > 0; i--) {
+	public void weaponReset() {
+		for (Weapon weapon : weapons) {
+			weapon.takeOff(this);
+		}
+		weapons.clear();
+		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤー武器, ""));
+		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーサブ武器, ""));
+		weapons.add(CreateWeapon.INSTANCE.create(1));
+	}
+
+	public void conditionnReset() {
+		for (Weapon weapon : weapons) {
+			weapon.takeOff(this);
+		}
+		weapons.clear();
+		weapons.add(CreateWeapon.INSTANCE.create(1));
+	}
+
+	public int descSearchItem(String name) {
+		for (int i = items.size() - 1; i >= 0; i--) {
 			if (items.get(i).getName().contains(name)) {
-				return items.get(i);
+				return i;
 			}
 		}
-		return null;
+		return -1;
+	}
+
+	public int descSearchItem(int itemId) {
+		for (int i = items.size() - 1; i >= 0; i--) {
+			if (items.get(i).getId() == itemId) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public int countItem(String name) {
@@ -295,6 +582,7 @@ public class Player extends Living {
 			n = 0;
 		}
 		setHP(n);
+		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーダメージ, String.valueOf(damage)));
 	}
 
 	@Override
@@ -308,6 +596,7 @@ public class Player extends Living {
 			n = maxHp;
 		}
 		setHP(n);
+		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤー回復, String.valueOf(heal)));
 	}
 
 	public void setLV(int lv) {
@@ -320,19 +609,34 @@ public class Player extends Living {
 		this.hp = hp;
 		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーHP, String.valueOf(hp)));
 		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤー最大HP, String.valueOf(maxHp)));
+		int percent = hp * 100 / maxHp;
+		if (percent <= 10) {
+			Battle.addLogs(new ScreenChange(ScreenEnum.HPがピンチ, ""));
+		} else if (percent <= 50) {
+			Battle.addLogs(new ScreenChange(ScreenEnum.HPが半分以下, ""));
+		} else {
+			Battle.addLogs(new ScreenChange(ScreenEnum.HPが普通, ""));
+		}
 	}
 
 	public void setTension(int tension) {
 		this.tension = tension;
-		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーテンション, String.valueOf(this.tension)));
+		Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーテンション, String.valueOf(tension)));
 	}
 
-	public void plusTension(Battle battle, List<ActionInfo> infos, int n, int tension) {
-		int t = this.tension + tension;
+	public void plusTension(Battle battle, List<ActionInfo> infos) {
+		int up = infos.get(0).getFinalNumber();
+		int t = this.tension + up;
 		if (t > 100) {
 			t = 100;
 		}
+		infos.get(0).addMessages("気合が" + t + "になった");
 		setTension(t);
+		if (0 < up) {
+			Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーテンションアップ, String.valueOf(up)));
+		} else {
+			Battle.addLogs(new ScreenChange(ScreenEnum.プレイヤーテンションダウン, String.valueOf(up)));
+		}
 		//return "気合が" + this.tension + "になった。";
 	}
 
@@ -340,8 +644,16 @@ public class Player extends Living {
 		setTension(0);
 	}
 
+	public void plusMultiBoost(double multiBoost) {
+		this.multiBoost *= multiBoost;
+	}
+
+	public int finalBoostPlus() {
+		return (2 + plusBoost) * multiBoost;
+	}
+
 	public void plusBoost(int boost) {
-		int n = this.boost = boost;
+		int n = this.boost + boost;
 		if (n > 100) {
 			n = 100;
 		}
@@ -429,5 +741,39 @@ public class Player extends Living {
 
 	public int getAction() {
 		return action;
+	}
+
+	public double getPriceMulti() {
+		return priceMulti;
+	}
+
+	public void plusPriceMulti(double priceMulti) {
+		this.priceMulti *= priceMulti;
+	}
+
+	public void setPriceMulti(double priceMulti) {
+		this.priceMulti = priceMulti;
+	}
+
+	public void plusBonus() {
+		bonus++;
+	}
+
+	public void resetBonus() {
+		bonus = 0;
+	}
+
+	public List<Boolean> getCommandClickFlags() {
+		return commandClickFlags;
+	}
+
+	public void clearCommands() {
+		for (int i = 0; i < 5; i++) {
+			commandClickFlags.set(i, true);
+		}
+	}
+
+	public void setCommandFalse(int n) {
+		commandClickFlags.set(n, false);
 	}
 }

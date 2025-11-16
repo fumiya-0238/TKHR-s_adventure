@@ -6,12 +6,9 @@ import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
 public class ダークマター extends Item {
-
 	@Override
-	public void use(Battle battle, List<ActionInfo> infos, int n) {
+	public void use(Battle battle, List<ActionInfo> infos) {
 		// TODO 自動生成されたメソッド・スタブ
-		infos.get(n).setDamage(20);
-		battle.getPlayer().calcDamage(battle, infos, n);
+		battle.getCommonEffect().commonDamege(battle, battle.getPlayer(), 20, true, infos);
 	}
-
 }

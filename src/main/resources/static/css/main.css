@@ -1,0 +1,295 @@
+@charset "UTF-8";
+
+* {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-touch-callout: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+#title {
+  position: relative;
+  outline: 5px solid green;
+  visibility: hidden;
+}
+#battle {
+  outline: 5px solid green;
+  position: absolute;
+  visibility: hidden;
+}
+
+.battleElement {
+  visibility: hidden;
+}
+
+.difficultyButton {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  object-fit: none;
+  visibility: hidden;
+}
+
+.difficultyButton:hover {
+  filter: brightness(70%);
+  transition: all 0.1s ease;
+}
+
+.list {
+  list-style-type: none;
+  /* リストの点を非表示 */
+}
+
+
+#monster,
+#effect,
+#monsterEffect {
+  visibility: hidden;
+  position: absolute;
+  width: 205px;
+  height: 205px;
+  object-fit: none;
+  /*transition: all 0.3s ease;*/
+}
+
+#messageWindow {
+  position: absolute;
+  visibility: hidden;
+}
+
+#messageText {
+  font-size: 18px;
+  color: white;
+  position: absolute;
+  visibility: hidden;
+  max-width: 427px;
+  overflow-wrap: break-word;
+  /* 長い単語を折り返す */
+  white-space: normal;
+  /* テキストを自動折り返し */
+}
+
+.text {
+  line-height: 1;
+  position: absolute;
+  font-family: 'MPゴシック';
+  /* フォントの種類 */
+  font-weight: bold;
+  /* 太字 */
+}
+
+.playerStatus,
+#maxHP,
+#weaponATK {
+  font-size: 22px;
+  /* 文字サイズ */
+  color: white;
+  /* 文字色 */
+}
+
+#playerDamage,
+#playerTensionUp,
+#playerGoldGet {
+  font-size: 22px;
+}
+
+#weaponName {
+  font-size: 22px;
+  color: yellow;
+}
+
+#subWeapon {
+  font-size: 18px;
+  /* 文字サイズ */
+  color: white;
+  /* 文字色 */
+}
+
+#subWeaponName {
+  font-size: 18px;
+  color: yellow;
+}
+
+.commands {
+  font-size: 23px;
+  /* 文字サイズ */
+  color: white;
+  /* 文字色 */
+}
+
+#attack,
+#weekAttack,
+#defence,
+#tameru {
+  width: 69px;
+}
+
+#acriticalAttack {
+  width: 120px;
+}
+
+.monsterStatus {
+  font-size: 19px;
+}
+
+#monsterHP,
+#monsterATK,
+#monsterEXP,
+#monsterGold {
+  color: white;
+}
+
+#difficulty,
+#floor,
+#sumTurn,
+#sumEXP {
+  font-size: 19px;
+  color: white;
+}
+
+#monsterName,
+#conditionButton,
+#battleLog,
+#setting,
+#goTitle {
+  font-size: 15px;
+  color: yellow;
+}
+
+#overHP,
+#monsterTurn {
+  color: #ff7f27;
+  /* 255,127,39 */
+}
+
+#boostGauge {
+  outline: 2px solid white;
+  position: absolute;
+}
+
+#boostPercent {
+  font-size: 25px;
+  color: yellow;
+  position: absolute;
+}
+
+#itemList {
+  color: white;
+  position: absolute;
+  font-size: 24px;
+  width: 201px;
+  padding: 0;
+  margin: 0;
+}
+
+#shop {
+  visibility: hidden;
+  position: absolute;
+  width: 427px;
+  height: 300px;
+  background-color: black;
+  color: white;
+}
+
+
+#weaponInfo {
+  visibility: hidden;
+  position: absolute;
+  width: 427px;
+  height: 300px;
+  background-color: blue;
+  color: white;
+}
+
+#monsterDamage {
+  color: red;
+  font-size: 80px;
+}
+
+#bonusResult {
+  color: #ff7f27;
+  font-size: 14px;
+  width: 200px;
+  white-space: normal;
+}
+
+#monsterBeat,
+#expResult,
+#levelUp {
+  color: white;
+  font-size: 14px;
+  width: 200px;
+  white-space: normal;
+}
+
+#dungeonSelect {
+  position: absolute;
+}
+
+#goSpecialDungeonButton {
+  position: absolute;
+}
+
+#conditionMessage{
+	width:160px;
+	height: 200px;
+	padding: 0;
+	margin: 0;
+	overflow-x: hidden;
+}
+
+.condition-item {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: black;
+  color: white;
+  outline: 2px solid yellow;
+  border-radius: 5px;
+  /* 初期状態：右に隠れて少し下 */
+  transform: translateX(100%) translateY(130px);
+  /* スライドインアニメーション */
+  animation: slideIn 0.1s forwards; 
+  transition: all 0.1s;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%) translateY(130px);
+  }
+
+  100% {
+    transform: translateX(5px) translateY(130px);
+  }
+}
+
+.condition-item.moved-up {
+  animation: moveUp 0.3s forwards;
+  /* スライドイン後に0.5秒待機 */
+}
+
+@keyframes moveUp {
+  0% {
+    transform: translateX(5px) translateY(130px);
+  }
+
+  100% {
+    transform: translateX(5px) translateY(0%);
+  }
+}
+
+
+@keyframes slideOut {
+  0% {
+    transform: translateX(5px);
+  }
+
+  100% {
+    transform: translateX(165px);
+  }
+}
+
+.condition-item.slide-out {
+  animation: slideOut 0.1s forwards;
+}

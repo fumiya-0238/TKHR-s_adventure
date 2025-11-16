@@ -4,52 +4,123 @@
 <head>
   <title>TKHRの冒険</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" type="text/css" th:href="@{/main.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/infoPage.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/shop.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/condition.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/log.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/dataBase.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/debug.css}"/>
 </head>
 
 <body>
-  <h1>ハリボテ</h1>
+  <h1>クリックで操作できます</h1>
   <img class="image" id="title" th:src="@{/images/Title.png}">
-
+  
+   <select id ="dungeonSelect" name = "dropDown">
+	<option value="shortage">品薄の洞窟</option>
+	<option value="inflation">インフレラッシュ</option>
+	<option value="convenience">便利な時代</option>
+	<option value="option4">デバッグ</option>
+   </select>
+   <button id="goSpecialDungeonButton" onclick="goSpecialDungeon()">行く</button>
   <div id="titlebutton">
     <!--初級ボタン-->
-    <input type="image" class="difficulty_button image" id="beginner" th:src="${beginner_Button}">
+    <input type="image" class="difficultyButton image" id="beginner" th:src="${beginner_Button}">
     <!--中級ボタン-->
-    <input type="image" class="difficulty_button image" id="novice" th:src="${novice_Button}">
+    <input type="image" class="difficultyButton image" id="novice" th:src="${novice_Button}">
     <!--上級ボタン-->
-    <input type="image" class="difficulty_button image" id="expert" th:src="${expert_Button}">
+    <input type="image" class="difficultyButton image" id="expert" th:src="${expert_Button}">
   </div>
-  <img class="image" id="battle" th:src="@{/images/Battle.png}">
-
+	
+  <img class="image battleElement" id="battle" th:src="@{/images/Battle.png}">
+  <div id="monsterImages">
   <img class="image" id="monster" th:src="${monster_Image}">
-  <div class="text player_status" id="LV"></div>
-  <div class="text player_status" id="HP"></div>
-  <div class="text player_status" id="ATK"></div>
-  <div class="text player_status" id="weapon"></div>
-  <div class="text player_status" id="tension"></div>
-  <div class="text player_status" id="EXP"></div>
-  <div class="text player_status" id="Gold"></div>
-  <ul class="text" id="itemList"></ul>
-  <div id="commandbutton">
-    <div class="text commands" id="attack">攻撃</div>
-    <div class="text commands" id="weekAttack">手加減</div>
-    <div class="text commands" id="criticalAttack"></div>
-    <div class="text commands" id="defence">防御</div>
-    <div class="text commands" id="tameru">ためる</div>
-    <!--<div class="text commands" id="boost">ブースト</div> -->
+  </div>
+  
+  <img class="image" id="effect" th:src = "@{/images/攻撃.gif}">
+
+  <div class="text battleElement" id="difficulty"></div>
+  <div class="text battleElement" id="floor"></div>
+  <div class="text battleElement" id="sumTurn"></div>
+  <div class="text battleElement" id="sumEXP"></div>
+  <div class="text battleElement infoButton" id="monsterName"></div>
+  <div class="text battleElement infoButton" id="conditionButton">状態確認</div>
+   <div class="text battleElement infoButton" id="battleLog">バトルログ</div>
+   <!--
+	<div class="text battleElement" id="setting">設定</div>
+-->
+   
+   <div class="text battleElement" id="goTitle">タイトルに戻る</div>
+   
+   <img class="image" id="messageWindow" th:src="@{/images/メッセージウィンドウ.png}">
+   <div class="text" id="messageText"></div>
+   
+   <div class="text" id="monsterBeat"></div>
+   <div class="text" id="bonusResult"></div>
+   <div class="text" id="expResult"></div>
+   <div class="text" id="levelUp"></div>
+   
+  <div class="text battleElement" id="boostPercent"></div>
+  <div class="text battleElement" id="monsterDamage"></div>
+  <div class="text battleElement" id="playerDamage"></div>
+  <div class="text battleElement" id="playerTensionUp"></div>
+  <div class="text battleElement" id="playerGoldGet"></div>
+  
+  <canvas class="text battleElement" id="boostGauge" width="100px" height="25px"></canvas>
+  
+  <div class="text playerStatus battleElement" id="LV"></div>
+  <div class="text playerStatus battleElement" id="HP"></div>
+  <div class="text battleElement" id="maxHP"></div>
+  <div class="text playerStatus battleElement" id="ATK"></div>
+  <div class="text battleElement" id="weaponATK"></div>
+  <div class="text playerStatus battleElement" id="weapon">武器:</div>
+  <div class="text battleElement infoButton" id="weaponName"></div>
+  <div class="text playerStatus battleElement" id="subWeapon">融合:</div>
+  <div class="text battleElement" id="subWeaponName"></div>
+  <div class="text playerStatus battleElement" id="tension"></div>
+  <div class="text playerStatus battleElement" id="EXP"></div>
+  <div class="text playerStatus battleElement" id="Gold"></div>
+  <ul class="text list battleElement" id="itemList"></ul>
+  <div id="cockatrice"></div>
+	
+  <div id="commandButton">
+    <div class="text commands battleElement" id="attack">攻撃</div>
+    <div class="text commands battleElement" id="weekAttack">手加減</div>
+    <div class="text commands battleElement" id="criticalAttack"></div>
+    <div class="text commands battleElement" id="defence">防御</div>
+    <div class="text commands battleElement" id="tameru">ためる</div>
+    <div class="text commands battleElement" id="boost">ブースト</div>
   </div>
 
-  <div class="text monster_status" id="monsterHP"></div>
-  <div class="text monster_status" id="overHP"></div>
-  <div class="text monster_status" id="monsterATK"></div>
-  <div class="text monster_status" id="monsterEXP"></div>
-  <div class="text monster_status" id="monsterGold"></div>
-  <div class="text monster_status" id="monsterTurn"></div>
+  <div class="text monsterStatus battleElement" id="monsterHP"></div>
+  <div class="text monsterStatus battleElement" id="overHP"></div>
+  <div class="text monsterStatus battleElement" id="monsterATK"></div>
+  <div class="text monsterStatus battleElement" id="monsterEXP"></div>
+  <div class="text monsterStatus battleElement" id="monsterGold"></div>
+  <div class="text monsterStatus battleElement" id="monsterTurn"></div>
+  <ul class="text list" id="conditionMessage"></ul>
   <!--
-        window.confirm("これが確認ダイアログです。");
- -->
+  製作者→<a href="https://x.com/FFF_SPL">@FFF_SPL</a>-->
+  
+  <!--画面-->
+  <div id ="shop" th:insert="~{shop :: shopContent}"></div>
+  <div id ="info" th:insert="~{infoPage :: infoContent}"></div>
+  <div id ="log" th:insert="~{battleLog :: logContent}"></div>
+  <div id ="dataBase" th:insert="~{dataBase :: dataBaseContent}"></div>
+  <div id ="debug" th:insert="~{debug :: debugContent}"></div>
   <script th:src="@{/js/setting.js}"></script>
-  <script th:src="@{/js/startbattle.js}"></script>
+  <script th:src="@{/js/title.js}"></script>
+  <script th:src="@{/js/battle.js}"></script>
+  <script th:src="@{/js/itemcommand.js}"></script>
+  <script th:src="@{/js/shop.js}"></script>
+  <script th:src="@{/js/info.js}"></script>
+  <script th:src="@{/js/componentEvent.js}"></script>
+  <script th:src="@{/js/conditionConfirm.js}"></script>
+  <script th:src="@{/js/battleLog.js}"></script>
+  <script th:src="@{/js/mouseClick.js}"></script>
+  <script th:src="@{/js/dataBase.js}"></script>
+  <script th:src="@{/js/debug.js}"></script>
 </body>
 
 </html>

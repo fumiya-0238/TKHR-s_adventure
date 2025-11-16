@@ -1,0 +1,23 @@
+@charset "UTF-8";
+#debug {
+  visibility: hidden;
+  position: absolute;
+}
+#debugRoom{
+	outline: 5px solid green;
+}
+#debugDungeons{
+	font-size: 15px;
+	top:0px;
+	color: yellow;
+	position: absolute;
+}
+
+.dungeonList{
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+.floorButton{
+	margin-bottom: 10px;
+}

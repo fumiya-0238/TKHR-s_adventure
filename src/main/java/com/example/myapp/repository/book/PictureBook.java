@@ -8,6 +8,7 @@ public class PictureBook {
 	private List<ConditionPage> conditionPages;
 	private List<ItemPage> itemPages;
 	private List<WeaponPage> weaponPages;
+	private List<ServicePage> servicePages;
 
 	public List<MonsterPage> getMonsterPages() {
 		return monsterPages;
@@ -28,6 +29,10 @@ public class PictureBook {
 	public List<WeaponPage> getWeaponPages() {
 		return weaponPages;
 	}
+	
+	public List<ServicePage> getServicePages() {
+		return servicePages;
+	}
 
 	public void setMonsterPages(List<MonsterPage> monsterPages) {
 		this.monsterPages = monsterPages;
@@ -47,6 +52,10 @@ public class PictureBook {
 
 	public void setWeaponPages(List<WeaponPage> weaponPages) {
 		this.weaponPages = weaponPages;
+	}
+	
+	public void setServicePages(List<ServicePage> servicePages) {
+		this.servicePages = servicePages;
 	}
 
 }

@@ -1,15 +1,22 @@
 package com.example.myapp.creater;
 
 import com.example.myapp.model.conditions.Condition;
+import com.example.myapp.model.conditions.infinity.いつでもショップ;
+import com.example.myapp.model.conditions.infinity.ためる強化;
 import com.example.myapp.model.conditions.infinity.アイテムヒール;
 import com.example.myapp.model.conditions.infinity.アサルトブースター;
 import com.example.myapp.model.conditions.infinity.アサルトペネトレイト;
 import com.example.myapp.model.conditions.infinity.ダークアーマー;
+import com.example.myapp.model.conditions.infinity.ツララボディ;
 import com.example.myapp.model.conditions.infinity.ディレイモード;
 import com.example.myapp.model.conditions.infinity.トゲトゲゾーン状態;
 import com.example.myapp.model.conditions.infinity.ヒールチャージ;
+import com.example.myapp.model.conditions.infinity.ブーストUP強化;
+import com.example.myapp.model.conditions.infinity.ボーナスバリア;
 import com.example.myapp.model.conditions.infinity.ヴァンパイアの魂;
+import com.example.myapp.model.conditions.infinity.中の人;
 import com.example.myapp.model.conditions.infinity.偶数攻撃;
+import com.example.myapp.model.conditions.infinity.先制攻撃;
 import com.example.myapp.model.conditions.infinity.初級武器強化;
 import com.example.myapp.model.conditions.infinity.古代の結界;
 import com.example.myapp.model.conditions.infinity.執念;
@@ -17,14 +24,15 @@ import com.example.myapp.model.conditions.infinity.強い執念;
 import com.example.myapp.model.conditions.infinity.強攻撃強化;
 import com.example.myapp.model.conditions.infinity.強攻撃無効;
 import com.example.myapp.model.conditions.infinity.手加減無効;
-import com.example.myapp.model.conditions.infinity.攻撃力変化;
+import com.example.myapp.model.conditions.infinity.擬態の術状態;
 import com.example.myapp.model.conditions.infinity.暴走スイッチ;
 import com.example.myapp.model.conditions.infinity.根性;
 import com.example.myapp.model.conditions.infinity.毎ターンHP回復;
 import com.example.myapp.model.conditions.infinity.毎ターンHP減少;
-import com.example.myapp.model.conditions.infinity.気合サブスク状態;
+import com.example.myapp.model.conditions.infinity.気まぐれ;
 import com.example.myapp.model.conditions.infinity.真珠状態;
 import com.example.myapp.model.conditions.infinity.纏った草;
+import com.example.myapp.model.conditions.infinity.草こもり;
 import com.example.myapp.model.conditions.oneturn.VIP客;
 import com.example.myapp.model.conditions.oneturn.アタックモード;
 import com.example.myapp.model.conditions.oneturn.カウンター状態;
@@ -32,17 +40,18 @@ import com.example.myapp.model.conditions.oneturn.ゴールドチャンス状態
 import com.example.myapp.model.conditions.oneturn.スライム状態;
 import com.example.myapp.model.conditions.oneturn.ダミー;
 import com.example.myapp.model.conditions.oneturn.ダメージ共有状態;
-import com.example.myapp.model.conditions.oneturn.デスマッチ;
 import com.example.myapp.model.conditions.oneturn.ネペントの消化液;
 import com.example.myapp.model.conditions.oneturn.バリア状態;
 import com.example.myapp.model.conditions.oneturn.バーサーク状態;
+import com.example.myapp.model.conditions.oneturn.ブレイクモード;
 import com.example.myapp.model.conditions.oneturn.ランタンフレイム;
+import com.example.myapp.model.conditions.oneturn.回復封じ状態;
 import com.example.myapp.model.conditions.oneturn.小さな勇気状態;
 import com.example.myapp.model.conditions.oneturn.挑発状態;
-import com.example.myapp.model.conditions.oneturn.擬態の術;
+import com.example.myapp.model.conditions.oneturn.攻撃力2倍;
 import com.example.myapp.model.conditions.oneturn.死神の呪い;
-import com.example.myapp.model.conditions.oneturn.毒;
-import com.example.myapp.model.conditions.oneturn.眼チャージ;
+import com.example.myapp.model.conditions.oneturn.毒状態;
+import com.example.myapp.model.conditions.oneturn.眼チャージ状態;
 import com.example.myapp.model.conditions.oneturn.貫通;
 import com.example.myapp.model.conditions.oneturn.防御強化状態;
 import com.example.myapp.model.conditions.oneturn.防御状態;
@@ -51,15 +60,16 @@ import com.example.myapp.repository.book.PictureBook;
 
 public enum CreateCondition {
 	INSTANCE;
+
 	private PictureBook pb;
-	
+
 	public void setPictureBook(PictureBook pb) {
 		this.pb = pb;
 	}
-	
+
 	public Condition create(ConditionEnum num) {
 		int id = num.getId();
-		ConditionPage cp = pb.getConditionPages().get(id-1);
+		ConditionPage cp = pb.getConditionPages().get(id - 1);
 		Condition condition;
 		switch (id) {
 		case 1:
@@ -118,33 +128,35 @@ public enum CreateCondition {
 			break;
 		case 19:
 			condition = new 纏った草();
+			//アロエ栽培
 			break;
 		case 20:
 			condition = new 偶数攻撃();
 			break;
 		case 21:
-			condition = new 毒();
+			condition = new 毒状態();
 			break;
 		case 22:
 			condition = new 強い執念();
 			break;
 		case 23:
-			condition = new 眼チャージ();
+			condition = new 眼チャージ状態();
 			break;
 		case 24:
-			condition = new デスマッチ();
+			condition = new 眼チャージ状態();
+			//condition = new デスマッチ();
 			break;
 		case 25:
 			condition = new ランタンフレイム();
 			break;
 		case 26:
-			condition = new 攻撃力変化();
+			condition = new 気まぐれ();
 			break;
 		case 27:
 			condition = new ダークアーマー();
 			break;
 		case 28:
-			condition = new 擬態の術();
+			condition = new 擬態の術状態();
 			break;
 		case 29:
 			condition = new スライム状態();
@@ -183,12 +195,28 @@ public enum CreateCondition {
 			condition = new 根性();
 			break;
 		case 41:
-			condition = new 気合サブスク状態();
-			break;
+			condition = new ツララボディ();
+		//	break;
 		case 42:
-			condition = new 気合サブスク状態();
+			condition = new ブレイクモード();
+			break;
+		case 43:
+			condition = new ためる強化();
+			break;
 		case 44:
 			condition = new 強攻撃強化();
+			break;
+		case 45:
+			condition = new 先制攻撃();
+			break;
+		case 47:
+			condition = new 回復封じ状態();
+			break;
+		case 49:
+			condition = new ブーストUP強化();
+			break;
+		case 50:
+			condition = new 攻撃力2倍();
 			break;
 		case 51:
 			condition = new ヒールチャージ();
@@ -196,10 +224,28 @@ public enum CreateCondition {
 		case 52:
 			condition = new アイテムヒール();
 			break;
+		case 53:
+			condition = new 草こもり();
+			break;	
+		case 54:
+			condition = new いつでもショップ();
+			break;
+		case 55:
+			condition = new ボーナスバリア();
+			break;
+		case 56:
+			condition = new 中の人();
+			break;
 		default:
 			condition = new ダミー();
 		}
 		condition.setStatus(cp.getId(), cp.getName(), cp.isDuplication());
+		return condition;
+	}
+
+	public Condition create(ConditionEnum num, int[] status) {
+		Condition condition = create(num);
+		condition.setLevel(status);
 		return condition;
 	}
 }

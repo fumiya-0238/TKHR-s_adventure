@@ -39,7 +39,7 @@ import com.example.myapp.model.monsters.生首培養;
 import com.example.myapp.model.monsters.眼魔神;
 import com.example.myapp.model.monsters.紅葉ネペント;
 import com.example.myapp.model.monsters.草太郎;
-import com.example.myapp.model.monsters.血欲の修道女;
+import com.example.myapp.model.monsters.ヴァンパイアシスター;
 import com.example.myapp.repository.book.MonsterPage;
 import com.example.myapp.repository.book.PictureBook;
 
@@ -168,7 +168,7 @@ public enum CreateMonster {
 			monster = new コカトリス();
 			break;
 		case 38:
-			monster = new 血欲の修道女();
+			monster = new ヴァンパイアシスター();
 			break;
 		case 39:
 			monster = new 土偶大魔神();

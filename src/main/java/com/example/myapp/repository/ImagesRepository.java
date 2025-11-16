@@ -124,7 +124,6 @@ public enum ImagesRepository {
     public String getExpertButton() {
         return expert_Button;
     }
-
     public String getMonsterImage(int ID, int newSize) {
         ID--;
         BufferedImage scaledImage = new BufferedImage(newSize, newSize, BufferedImage.TYPE_INT_ARGB);

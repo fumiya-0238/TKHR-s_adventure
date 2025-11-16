@@ -31,6 +31,7 @@ import com.example.myapp.model.weapons.素手;
 import com.example.myapp.model.weapons.貫通剣;
 import com.example.myapp.model.weapons.鉄の剣;
 import com.example.myapp.model.weapons.鉄の槍;
+import com.example.myapp.model.weapons.鋼の剣;
 import com.example.myapp.model.weapons.骨の槍;
 import com.example.myapp.repository.book.PictureBook;
 import com.example.myapp.repository.book.WeaponPage;
@@ -70,76 +71,79 @@ public enum CreateWeapon {
 			weapon = new 鉄の槍();
 			break;
 		case 8:
-			weapon = new 強強剣();
-			break;
-		case 9:
 			weapon = new 入魂剣();
 			break;
+		case 9:
+			weapon = new 強強剣();
+			break;
 		case 10:
-			weapon = new 貫通剣();
+			weapon = new 鋼の剣();
 			break;
 		case 11:
-			weapon = new 火炎の剣();
+			weapon = new 貫通剣();
 			break;
 		case 12:
-			weapon = new 天使の剣();
+			weapon = new 火炎の剣();
 			break;
 		case 13:
-			weapon = new ブースティア();
+			weapon = new 天使の剣();
 			break;
 		case 14:
-			weapon = new チャージャーEX();
+			weapon = new ブースティア();
 			break;
 		case 15:
-			weapon = new VIPの剣();
+			weapon = new チャージャーEX();
 			break;
 		case 16:
-			weapon = new エナジーブレイブ();
+			weapon = new VIPの剣();
 			break;
 		case 17:
-			weapon = new ディレイソード();
+			weapon = new エナジーブレイブ();
 			break;
 		case 18:
-			weapon = new ライトブリンガー();
+			weapon = new アクセラレイバー();
 			break;
 		case 19:
-			weapon = new ダイヤモンドの槍();
+			weapon = new ディレイソード();
 			break;
 		case 20:
-			weapon = new タイタンブレード();
+			weapon = new ライトブリンガー();
 			break;
 		case 21:
-			weapon = new 世界樹の剣();
+			weapon = new ダイヤモンドの槍();
 			break;
 		case 22:
-			weapon = new 死神の鎌();
+			weapon = new タイタンブレード();
 			break;
 		case 23:
-			weapon = new アイテムフォース();
+			weapon = new 世界樹の剣();
 			break;
 		case 24:
-			weapon = new エクスカリバー();
+			weapon = new 死神の鎌();
 			break;
 		case 25:
-			weapon = new デュランダル();
+			weapon = new アイテムフォース();
 			break;
 		case 26:
-			weapon = new マスターシンプル();
+			weapon = new エクスカリバー();
 			break;
 		case 27:
-			weapon = new デザイアの剣();
+			weapon = new デュランダル();
 			break;
 		case 28:
-			weapon = new 勇者の剣X();
+			weapon = new マスターシンプル();
 			break;
 		case 29:
-			weapon = new キングスブレイド();
+			weapon = new デザイアの剣();
 			break;
 		case 30:
-			weapon = new デバッギン();
+			weapon = new 勇者の剣X();
 			break;
 		case 31:
-			weapon = new アクセラレイバー();
+			weapon = new キングスブレイド();
+			break;
+		case 32:
+			weapon = new デバッギン();
 			break;
 		default:
 			weapon = new 素手();

@@ -16,9 +16,4 @@ public class ScreenChange {
 	public String getStatus() {
 		return status;
 	}
-	/*
-		public void setScreenEnum(ScreenEnum screenEnum) {
-			this.screenEnum = screenEnum;
-		}
-	*/
 }

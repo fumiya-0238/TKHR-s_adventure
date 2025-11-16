@@ -1,6 +1,7 @@
 package com.example.myapp.creater;
 
 import com.example.myapp.model.items.Item;
+import com.example.myapp.model.items.いつでもショップ;
 import com.example.myapp.model.items.とどめ玉;
 import com.example.myapp.model.items.アロエ草;
 import com.example.myapp.model.items.カウンター;
@@ -13,7 +14,6 @@ import com.example.myapp.model.items.トゲトゲゾーン;
 import com.example.myapp.model.items.バトルゴング;
 import com.example.myapp.model.items.バリア;
 import com.example.myapp.model.items.バーサーク;
-import com.example.myapp.model.items.ブレイクモード;
 import com.example.myapp.model.items.ブーストMAX;
 import com.example.myapp.model.items.ブーストアップ;
 import com.example.myapp.model.items.上級火の玉;
@@ -26,6 +26,7 @@ import com.example.myapp.model.items.強チャージ;
 import com.example.myapp.model.items.挑発;
 import com.example.myapp.model.items.気合いサブスク;
 import com.example.myapp.model.items.気合ため;
+import com.example.myapp.model.items.気合ビート;
 import com.example.myapp.model.items.火の玉;
 import com.example.myapp.model.items.真珠;
 import com.example.myapp.model.items.研ぎ石;
@@ -65,64 +66,64 @@ public enum CreateItem {
 			item = new 防御強化();
 			break;
 		case 6:
-			item = new ダメージ草();
-			break;
-		case 7:
-			item = new バーサーク();
-			break;
-		case 8:
-			item = new 挑発();
-			break;
-		case 9:
-			item = new アロエ草();
-			break;
-		case 10:
-			item = new 真珠();
-			break;
-		case 11:
-			item = new 薬草詰め合わせ();
-			break;
-		case 12:
-			item = new 上級火の玉();
-			break;
-		case 13:
 			item = new 気合ため();
 			break;
-		case 14:
-			item = new 研ぎ石();
+		case 7:
+			item = new ブーストアップ();
 			break;
-		case 15:
-			item = new ダメージ共有();
-			break;
-		case 16:
-			item = new カウンター();
-			break;
-		case 17:
+		case 8:
 			item = new 回復封じ();
 			break;
+		case 9:
+			item = new ダメージ草();
+			break;
+		case 10:
+			item = new バーサーク();
+			break;
+		case 11:
+			item = new アロエ草();
+			break;
+		case 12:
+			item = new タイムアッパー();
+			break;
+		case 13:
+			item = new 真珠();
+			break;
+		case 14:
+			item = new 薬草詰め合わせ();
+			break;
+		case 15:
+			item = new 上級火の玉();
+			break;
+		case 16:
+			item = new 研ぎ石();
+			break;
+		case 17:
+			item = new ダメージ共有();
+			break;
 		case 18:
-			item = new ブーストアップ();
+			item = new カウンター();
 			break;
 		case 19:
 			item = new ゴールドチャンス();
 			break;
 		case 20:
-			item = new ダークマター();
+			item = new 挑発();
 			break;
 		case 21:
-			item = new 光の玉();
+			item = new ダークマター();
 			break;
 		case 22:
-			item = new 超ダメージ草();
+			item = new 光の玉();	
 			break;
 		case 23:
-			item = new バトルゴング();
+			item = new 超ダメージ草();
 			break;
 		case 24:
-			item = new バリア();
+			item = new バトルゴング();
 			break;
 		case 25:
-			item = new タイムアッパー();
+			item = new バリア();
 			break;
 		case 26:
 			item = new 気合いサブスク();
@@ -131,7 +132,7 @@ public enum CreateItem {
 			item = new トゲトゲゾーン();
 			break;
 		case 28:
-			item = new ブレイクモード();
+			item = new 気合ビート();
 			break;
 		case 29:
 			item = new 小さな勇気();
@@ -144,6 +145,9 @@ public enum CreateItem {
 			break;
 		case 32:
 			item = new 伝説のハンマー();
+			break;
+		case 33:
+			item = new いつでもショップ();
 			break;
 		default:
 			item = new 火の玉();

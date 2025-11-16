@@ -11,6 +11,7 @@ import com.example.myapp.creater.CreateAction;
 import com.example.myapp.creater.CreateCondition;
 import com.example.myapp.creater.CreateItem;
 import com.example.myapp.creater.CreateMonster;
+import com.example.myapp.creater.CreateService;
 import com.example.myapp.creater.CreateWeapon;
 import com.example.myapp.model.Difficulty;
 import com.example.myapp.repository.book.ActionPage;
@@ -19,20 +20,27 @@ import com.example.myapp.repository.book.ConditionPage;
 import com.example.myapp.repository.book.ItemPage;
 import com.example.myapp.repository.book.MonsterPage;
 import com.example.myapp.repository.book.PictureBook;
+import com.example.myapp.repository.book.ServicePage;
 import com.example.myapp.repository.book.WeaponPage;
+import com.example.myapp.repository.shop.ShopItem;
+import com.example.myapp.repository.shop.ShopService;
+import com.example.myapp.repository.shop.ShopWeapon;
 
 public class SQLGetter {
-	public void init(JdbcTemplate jdbcTemplate, PictureBook pictureBook, Dungeon dungeon) {
+	public void init(List<Difficulty> difficulties, JdbcTemplate jdbcTemplate, PictureBook pictureBook) {
 		List<MonsterPage> mp = new ArrayList<>();
 		List<ActionPage> ap = new ArrayList<>();
 		List<ConditionPage> cp = new ArrayList<>();
 		List<ItemPage> ip = new ArrayList<>();
 		List<WeaponPage> wp = new ArrayList<>();
+		List<ServicePage> sp = new ArrayList<>();
 		int monsters = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM monsters", Integer.class);
 		int items = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM items", Integer.class);
 		int weapons = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM weapons", Integer.class);
 		int conditions = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM conditions", Integer.class);
 		int actions = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM actions", Integer.class);
+		int services = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM services", Integer.class);
+		int dif = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM difficulties", Integer.class);
 
 		for (int i = 1; i <= monsters; i++) {
 			mp.add(jdbcTemplate.queryForObject("SELECT * FROM monsters WHERE id = ?",
@@ -101,65 +109,106 @@ public class SQLGetter {
 					}, i));
 		}
 		pictureBook.setConditionPages(cp);
+
+		for (int i = 1; i <= services; i++) {
+			sp.add(jdbcTemplate.queryForObject("SELECT * FROM services WHERE id = ?",
+					(rs, rowNum) -> {
+						ServicePage m = new ServicePage(
+								rs.getInt("id"),
+								rs.getString("name"),
+								rs.getInt("price"));
+						return m;
+					}, i));
+		}
+		pictureBook.setServicePages(sp);
 		CreateMonster.INSTANCE.setPictureBook(pictureBook);
 		CreateAction.INSTANCE.setPictureBook(pictureBook);
 		CreateItem.INSTANCE.setPictureBook(pictureBook);
 		CreateWeapon.INSTANCE.setPictureBook(pictureBook);
 		CreateCondition.INSTANCE.setPictureBook(pictureBook);
+		CreateService.INSTANCE.setPictureBook(pictureBook);
+		for (int i = 1; i <= dif; i++) {
+			difficulties.add(jdbcTemplate.queryForObject("SELECT * FROM difficulties WHERE id = ?",
+					(rs, rowNum) -> {
+						Difficulty m = new Difficulty(
+								rs.getString("name_physical"),
+								rs.getString("name_logical"),
+								rs.getInt("start_lv"));
+						return m;
+					}, i));
+		}
+
 	}
 
 	public void goFirstFloor(JdbcTemplate jdbcTemplate, Difficulty difficulty, Dungeon dungeon,
 			PictureBook pictureBook) {
-		String difficultySql = difficulty.getSql();
+		String difficultySql = difficulty.getPhysicalName();
 		List<Integer> monsterIds = new ArrayList<>();
+		List<Integer> monsterLv = new ArrayList<>();
 		List<ShopItem> itemInfo = new ArrayList<>();
 		List<ShopWeapon> weaponInfo = new ArrayList<>();
-		int monsters = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM " + difficultySql + "_monsters",
+		List<ShopService> serviceInfo = new ArrayList<>();
+		List<Integer> shopFloors = new ArrayList<>();
+		int monsters = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM " + difficultySql + "_monster",
 				Integer.class);
 		int items = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM " + difficultySql + "_item", Integer.class);
 		int weapons = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM " + difficultySql + "_weapon", Integer.class);
+		int services = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM " + difficultySql + "_service", Integer.class);
+		int sf = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM " + difficultySql + "_shopfloors", Integer.class);
+		
 		for (int i = 1; i <= monsters; i++) {
 			monsterIds.add(jdbcTemplate.queryForObject(
-					"SELECT monster_id FROM " + difficultySql + "_monsters WHERE id=?", Integer.class, i));
+					"SELECT monster_id FROM " + difficultySql + "_monster WHERE id = ?", Integer.class, i));
 		}
+		
+		for (int i = 1; i <= monsters; i++) {
+			monsterLv.add(jdbcTemplate.queryForObject(
+					"SELECT monster_lv FROM " + difficultySql + "_monster WHERE id = ?", Integer.class, i));
+		}
+
 		for (int i = 1; i <= items; i++) {
-			int itemId;
-			String itemStock;
-			itemId = jdbcTemplate.queryForObject(
-					"SELECT item_id FROM " + difficultySql + "_item WHERE id=?", Integer.class, i);
-			int stock = jdbcTemplate.queryForObject(
-					"SELECT stock FROM " + difficultySql + "_item WHERE id=?", Integer.class, i);
-			if (stock == 0) {
-				itemStock = "∞";
-			} else {
-				itemStock = String.valueOf(stock);
-			}
+			int itemId = jdbcTemplate.queryForObject(
+					"SELECT item_id FROM " + difficultySql + "_item WHERE id = ?", Integer.class, i);
+			int itemStock = jdbcTemplate.queryForObject(
+					"SELECT stock FROM " + difficultySql + "_item WHERE id = ?", Integer.class, i);
 			ItemPage ip = pictureBook.getItemPages().get(itemId - 1);
 			ShopItem shopItem = new ShopItem(i, ip.getId(), ip.getName(), ip.getFurigana(), ip.getPrice(), itemStock);
 			itemInfo.add(shopItem);
 		}
+
 		for (int i = 1; i <= weapons; i++) {
-			int weaponId;
-			String weaponStock;
-			weaponId = jdbcTemplate.queryForObject(
-					"SELECT weapon_id FROM " + difficultySql + "_weapon WHERE id=?", Integer.class, i);
-			int stock = jdbcTemplate.queryForObject(
-					"SELECT stock FROM " + difficultySql + "_weapon WHERE id=?", Integer.class, i);
-			if (stock == 0) {
-				weaponStock = "∞";
-			} else {
-				weaponStock = String.valueOf(stock);
-			}
+			int weaponId = jdbcTemplate.queryForObject(
+					"SELECT weapon_id FROM " + difficultySql + "_weapon WHERE id = ?", Integer.class, i);
+			int weaponStock = jdbcTemplate.queryForObject(
+					"SELECT stock FROM " + difficultySql + "_weapon WHERE id = ?", Integer.class, i);
 			WeaponPage wp = pictureBook.getWeaponPages().get(weaponId - 1);
 			ShopWeapon shopWeapon = new ShopWeapon(i, wp.getId(), wp.getName(), wp.getAttack(), wp.getFurigana(),
 					wp.getPrice(), weaponStock);
 			weaponInfo.add(shopWeapon);
 		}
-		dungeon.setStatus(monsterIds, weaponInfo, itemInfo);
+
+		for (int i = 1; i <= services; i++) {
+			int serviceId = jdbcTemplate.queryForObject(
+					"SELECT service_id FROM " + difficultySql + "_service WHERE id = ?", Integer.class, i);
+			int serviceStock = jdbcTemplate.queryForObject(
+					"SELECT stock FROM " + difficultySql + "_service WHERE id = ?", Integer.class, i);
+
+			ServicePage sp = pictureBook.getServicePages().get(serviceId - 1);
+			ShopService shopService = new ShopService(i, sp.getId(), sp.getName(), sp.getPrice(), serviceStock);
+			serviceInfo.add(shopService);
+		}
+
+		for (int i = 1; i <= sf; i++) {
+			int serviceStock = jdbcTemplate.queryForObject(
+					"SELECT floor FROM " + difficultySql + "_shopfloors WHERE id=?", Integer.class, i);
+			shopFloors.add(serviceStock);
+		}
+
+		dungeon.setStatus(monsterIds, monsterLv, weaponInfo, itemInfo, serviceInfo, shopFloors);
 	}
 
 	public void relation(JdbcTemplate jdbcTemplate, PictureBook pictureBook) {
-		String regex = "<[a-zA-Z]+/[1-9][0-9]*>";
+		String regex = "<[^>]+/\\d+(?:(?:/\\d+)*|(?:/<n>))>";//"<[^>]*\\/+[^>]*>";
 		Pattern pattern = Pattern.compile(regex);
 		for (int i = 1, l = pictureBook.getItemPages().size(); i <= l; i++) {
 			String text = jdbcTemplate.queryForObject("SELECT text FROM items WHERE id = ?", String.class, i);
@@ -177,6 +226,10 @@ public class SQLGetter {
 			String text = jdbcTemplate.queryForObject("SELECT text FROM actions WHERE id = ?", String.class, i);
 			macherFind(jdbcTemplate, pictureBook, pictureBook.getActionPages().get(i - 1), text, pattern);
 		}
+		for (int i = 1, l = pictureBook.getActionPages().size(); i <= l; i++) {
+			String text = jdbcTemplate.queryForObject("SELECT text FROM monsters WHERE id = ?", String.class, i);
+			macherFind(jdbcTemplate, pictureBook, pictureBook.getMonsterPages().get(i - 1), text, pattern);
+		}
 	}
 
 	private void macherFind(JdbcTemplate jdbcTemplate, PictureBook pictureBook, BookPage bookPage, String text,
@@ -185,7 +238,7 @@ public class SQLGetter {
 		List<String> texts = new ArrayList<>();
 		BookPage subPage;
 		int lastEnd = 0;
-		while (matcher.find()) {
+		for (int i = 0; matcher.find(); i++) {
 			String matched = matcher.group(); // 一致した文字列
 			int startPosition = matcher.start(); // 開始位置（0-based）
 			int endPosition = matcher.end();
@@ -216,8 +269,15 @@ public class SQLGetter {
 			default:
 				subPage = pictureBook.getItemPages().get(Integer.parseInt(arrays[1]) - 1);
 			}
+			if (3 == arrays.length) {
+				//List<String> list = new ArrayList<>();
+				//for (int j = 2, l = arrays.length; j < l; j++) {
+				//	list.add(i + "/" + arrays[j]);
+				//}
+				bookPage.setPageN(i + "/" +arrays[2]);
+			}
 			texts.add("<" + subPage.getName() + ">");
-			bookPage.setSubPage(subPage);
+			bookPage.addSubPage(subPage);
 		}
 		if (lastEnd == 0) {
 			// 一致部分がなかった場合、文字列全体を追加

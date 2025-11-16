@@ -10,6 +10,15 @@ public class WeaponPage extends BookPage {
 		this.price = price;
 		this.furigana = furigana;
 		this.attack = attack;
+		defaultPageName("weapon");
+	}
+
+	public WeaponPage(WeaponPage page) {
+		super(page);
+		setPageName(page.getPageName());
+		price = page.getPrice();
+		furigana = page.getFurigana();
+		attack = page.getAttack();
 	}
 
 	public String getFurigana() {

@@ -1,25 +1,16 @@
 package com.example.myapp.model.monsters;
 
+import com.example.myapp.creater.CreateAction;
 import com.example.myapp.repository.Battle;
-import com.example.myapp.repository.ActionInfo;
-import com.example.myapp.model.monsters.actions.AttackActionList;
 
 public class スライム extends Monster {
-	public スライム(int ID) {
-		name = "スライム";
-		HP = 3;
-		OverHP = 5;
-		ATK = 2;
-		EXP = 2;
-		Gold = 8;
-		Turn = 3;
-		this.ID = ID;
-		super.init();
-	}
-
 	@Override
-	public void actions(Battle battle, ActionInfo info) {
-		AttackActionList.INSTANCE.normalAttack(battle, info);
+	public void reset() {
+		// TODO 自動生成されたメソッド・スタブ
+		actions.add(CreateAction.INSTANCE.create(1));
 	}
-
+	@Override
+	public void actions(Battle battle) {
+		setAction(actions.get(0));
+	}
 }

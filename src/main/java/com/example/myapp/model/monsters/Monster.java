@@ -1,111 +1,159 @@
 package com.example.myapp.model.monsters;
 
-import com.example.myapp.repository.Battle;
-import com.example.myapp.repository.ActionInfo;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.myapp.creater.ConditionEnum;
 import com.example.myapp.model.Living;
-import com.example.myapp.model.conditions.CreateCondition;
-import com.example.myapp.model.monsters.actions.AttackActionList;
+import com.example.myapp.model.actions.Action;
+import com.example.myapp.model.conditions.Condition;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
+import com.example.myapp.repository.ScreenChange;
+import com.example.myapp.repository.ScreenEnum;
 
 public abstract class Monster extends Living {
-	protected String name;
-	protected int OverHP;
-	protected int MAXOverHP;
-	protected int EXP;
-	protected int Gold;
-	protected int Turn;
-	protected int ID;
-	protected boolean death;
+	protected int id;
+	protected int overHp;
+	protected int maxOverHp;
+	protected int turn;
+	protected List<Action> actions;
+	protected List<String> relateds;
+	protected Action action;
+	private boolean death;
 
-	public void init() {
-		MAXHP = HP;
-		MAXOverHP = OverHP;
+	public Monster() {
+		actions = new ArrayList<>();
 	}
 
-	final public void calcDamageResult(Battle battle, ActionInfo info) {
-		int resultDamage = simulateDamage(battle, info);
-		String text = name + "に" + resultDamage + "ダメージを与えた。";
-		setDamage(resultDamage);
+	public abstract void reset();
+
+	public abstract void actions(Battle battle);
+
+	public void setStatus(int id, String name, int hp, int overHp, int attack, int exp, int gold, int turn) {
+		this.id = id;
+		this.name = name;
+		Battle.addLogs(new ScreenChange(ScreenEnum.モンスター名, String.valueOf(name)));
+		setHP(hp);
+		maxHp = hp;
+		setOverHP(overHp);
+		maxOverHp = overHp;
+		setAttack(attack);
+		setEXP(exp);
+		setGold(gold);
+		setTurn(turn);
 	}
 
-	final public int simulateDamage(Battle battle, ActionInfo info) {
-		int action = battle.getPlayer().getAction();
-		int damage = info.getDamage();
-		if (amountCondition(CreateCondition.CONTROL_SWITCH) == 1 && action == 3) {
-			battle.setMonster(new 暴走培養(34));
+	@Override
+	public void death(Battle battle, List<ActionInfo> infos) {
+		if (death) {
+			return;
 		}
-		if (amountCondition(CreateCondition.WEEK_INVALID) == 1 && action == 2) {
-			damage = 0;
+		infos.get(0).processFlagIsTrue();
+		death = true;
+		// TODO 自動生成されたメソッド・スタブ
+		if (overHp < 0) {
+			overHp = 0;
 		}
+		setHP(0);
+		battle.messageBatch();
 
-		return damage;
-	}
+		for (Condition condition : conditions) {
+			condition.hpZero(battle, this, infos);
+		}
+		if (0 == amountCondition(ConditionEnum.執念) && 0 == amountCondition(ConditionEnum.強い執念)) {
+			Battle.addLogs(new ScreenChange(ScreenEnum.モンスター削除, ""));
+			Battle.addLogs(new ScreenChange(ScreenEnum.ストップ, ""));
+		}
+		//Battle.addLogs(new ScreenChange(ScreenEnum.待機, "300"));
+		battle.turnEnd(infos);
+		Battle.addLogs(new ScreenChange(ScreenEnum.モンスター撃破, name));
+		Battle.addLogs(new ScreenChange(ScreenEnum.モンスターダメージ削除, ""));
+		battle.getPlayer().setEXPGold(exp, gold, turn > 0, overHp == 0);
+		battle.nextFloorCheck();
 
-	public abstract void actions(Battle battle, ActionInfo info);
-
-	public String standardDeath(Battle battle) {
-		// text.append(getName() + "を倒した。");
-		if (amountCondition(CreateCondition.TENACITY) == 1)
-			AttackActionList.INSTANCE.normalAttack(battle, new ActionInfo());
-		battle.getPlayer().setEXPGold(EXP, Gold, Turn > 0, OverHP == 0);
-		return "";
-	}
-
-	public void turnEnd() {
 	}
 
 	public void setTurn(int turn) {
-		this.Turn += turn;
-	}
-
-	private void setDamage(int damage) {
-		HP -= damage;
-		OverHP -= damage;
-		if (HP < 0) {
-			HP = 0;
-			if (OverHP < 0)
-				OverHP = 0;
+		this.turn = turn;
+		if (0 < turn) {
+			Battle.addLogs(new ScreenChange(ScreenEnum.ボーナスターン, String.valueOf(turn)));
+		} else {
+			Battle.addLogs(new ScreenChange(ScreenEnum.ボーナスターン消滅, ""));
 		}
 	}
 
+	public void plusTurn(int turn) {
+		if (turn == 0) {
+			return;
+		}
+		setTurn(this.turn + turn);
+	}
+
+	@Override
+	public void setHP(int hp) {
+		this.hp = hp;
+		Battle.addLogs(new ScreenChange(ScreenEnum.モンスターHP, String.valueOf(hp)));
+		Battle.addLogs(new ScreenChange(ScreenEnum.モンスターオーバーHP, String.valueOf(overHp)));
+	}
+
+	public void setOverHP(int overHp) {
+		this.overHp = overHp;
+		Battle.addLogs(new ScreenChange(ScreenEnum.モンスターオーバーHP, String.valueOf(overHp)));
+	}
+
+	@Override
+	public void setDamage(int damage) {
+		int n = hp - damage;
+		int overN = overHp - damage;
+		if (0 < n) {
+			setHP(n);
+			setOverHP(overN);
+		} else {
+			hp = n;
+			overHp = overN;
+		}
+		Battle.addLogs(new ScreenChange(ScreenEnum.モンスターダメージ, String.valueOf(damage)));
+	}
+
+	@Override
 	public void setHeal(int heal) {
-		HP += heal;
-		OverHP += heal;
-		if (HP > MAXHP) {
-			HP = MAXHP;
-			OverHP = MAXOverHP;
+		Battle.addLogs(new ScreenChange(ScreenEnum.モンスター回復, String.valueOf(heal)));
+		int n = hp + heal;
+		overHp += heal;
+		if (n > maxHp) {
+			n = maxHp;
+			overHp = maxOverHp;
 		}
+		setHP(n);
 	}
 
-	public String getName() {
-		return name;
+	public int getId() {
+		return id;
 	}
 
 	public int getOverHP() {
-		return OverHP;
-	}
-
-	public int getATK() {
-		return ATK;
-	}
-
-	public int getEXP() {
-		return EXP;
-	}
-
-	public int getGold() {
-		return Gold;
+		return overHp;
 	}
 
 	public int getTurn() {
-		return Turn;
+		return turn;
 	}
 
-	public int getID() {
-		return ID;
+	public List<Action> getActions() {
+		return actions;
 	}
 
-	public void downTurn() {
-		Turn--;
+	public Action getAction() {
+		return action;
+	}
+
+	public boolean deathIs() {
+		return death;
+	}
+
+	public void setAction(Action action) {
+		this.action = action;
 	}
 
 }

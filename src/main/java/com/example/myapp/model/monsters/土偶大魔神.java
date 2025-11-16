@@ -1,19 +1,22 @@
 package com.example.myapp.model.monsters;
 
-import com.example.myapp.creater.CreateAction;
+import java.util.List;
+
+import com.example.myapp.repository.ActionInfo;
 import com.example.myapp.repository.Battle;
 
-public class イングラス extends Monster {
-	
+public class 土偶大魔神 extends Monster {
 	@Override
 	public void reset() {
 		// TODO 自動生成されたメソッド・スタブ
-		actions.add(CreateAction.INSTANCE.create(1));
 	}
 	
 	@Override
-	public void actions(Battle battle) {
+	public void actions(Battle battle, List<ActionInfo> infos ,int n) {
 		// TODO 自動生成されたメソッド・スタブ
-		setAction(actions.get(0));	
+
 	}
+
+	
+
 }

@@ -1,26 +1,22 @@
 package com.example.myapp.model.monsters;
 
+import com.example.myapp.creater.CreateAction;
 import com.example.myapp.repository.Battle;
-import com.example.myapp.repository.ActionInfo;
-import com.example.myapp.model.monsters.actions.AttackActionList;
 
 public class ネペント extends Monster {
-	public ネペント(int ID) {
-		name = "ネペント";
-		HP = 21;
-		OverHP = 29;
-		ATK = 8;
-		EXP = 7;
-		Gold = 16;
-		Turn = 4;
-		this.ID = ID;
+	@Override
+	public void reset() {
+		// TODO 自動生成されたメソッド・スタブ
+		actions.add(CreateAction.INSTANCE.create(1));
+		actions.add(CreateAction.INSTANCE.create(5));
 	}
 
 	@Override
-	public void actions(Battle battle, ActionInfo info) {
-		if (HP % 3 == 0)
-			AttackActionList.INSTANCE.normalAttack(battle, info);
-		else
-			AttackActionList.INSTANCE.drainAttack(battle, info);
+	public void actions(Battle battle) {
+		if (hp % 3 == 0) {
+			setAction(actions.get(1));
+		} else {
+			setAction(actions.get(0));
+		}
 	}
 }

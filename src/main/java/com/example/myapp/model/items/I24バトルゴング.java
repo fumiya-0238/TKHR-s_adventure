@@ -1,0 +1,18 @@
+package com.example.myapp.model.items;
+
+import java.util.List;
+
+import com.example.myapp.creater.ConditionEnum;
+import com.example.myapp.repository.ActionInfo;
+import com.example.myapp.repository.Battle;
+
+public class I24バトルゴング extends Item {
+	@Override
+	public void use(Battle battle, List<ActionInfo> infos) {
+		// TODO 自動生成されたメソッド・スタブ
+		battle.getPlayer().plusCondition(battle, infos, ConditionEnum.攻撃力2倍);
+		battle.getTargetMonster().plusCondition(battle, infos, ConditionEnum.攻撃力2倍);
+		battle.getPlayer().plusCondition(battle, infos, ConditionEnum.根性);
+		battle.getTargetMonster().plusCondition(battle, infos, ConditionEnum.根性);
+	}
+}

@@ -1,0 +1,70 @@
+@charset "UTF-8";
+
+#log {
+  visibility: hidden;
+  position: absolute;
+  width: 640px;
+  height: 480px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+#closeLog {
+  font-size: 20px;
+  color: yellow;
+}
+
+.log-scroll-container {
+  width: 560px;
+  height: 480px;
+  left: 80px;
+  top: 0px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  overflow: auto;
+}
+
+.log-scroll-container::-webkit-scrollbar {
+  width: 12px;
+  /* スクロールバーの幅 */
+}
+
+.log-scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* トラックの背景色 */
+  border-radius: 10px;
+}
+
+.log-scroll-container::-webkit-scrollbar-thumb {
+  background: #888;
+  /* スクロールバーのつまみの色 */
+  border-radius: 10px;
+}
+
+.log-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  /* ホバー時の色 */
+}
+
+.log-scroll-container li {
+  margin-bottom: 5px;
+}
+
+.logTurn {
+  color: yellow;
+}
+.logPlayer {
+  color: #98fb98;
+}
+.logMonster {
+  color: #ffb6c1;
+}
+.logText {
+  position: absolute;
+  width: max-content;
+  /*
+	flex-wrap: wrap;
+	display: flex;
+	gap: 0px; /* 要素間の間隔 */
+}

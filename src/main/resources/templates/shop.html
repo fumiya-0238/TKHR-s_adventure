@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+  <div th:fragment="shopContent">
+    <div class="tab-container">
+      <!-- タブメニュー -->
+      <div class="tab-menu">
+        <button class="tab-button active" id="shopItemButton">アイテム</button>
+        <button class="tab-button" id="shopWeaponButton">武器</button>
+        <button class="tab-button" id="shopServiceButton">サービス</button>
+      </div>
+	  
+      <div id = "sort" class = "fixedContent">
+		<div class="text" id="shopInfo"></div>
+		<div id="narabikae" class = "text">並び替え></div>
+		<div id="cancelFusion" class = "text">融合をやめる</div>
+		<div id="nextFloor" class="text">次の階へ行く</div>
+        <select id="shopSort">
+			<option value="option1">種類順</option>
+			 <option value="option2">値段順</option>
+			 <option value="option3">名前順</option>
+        </select>
+      </div>
+	  
+      <!-- タブコンテンツ -->
+      <div id="tab1" class="tab-content active">
+		<div class="shop-scroll-container">
+        <ul class="text list" id="shopItemList">
+        </ul>
+		</div>
+      </div>
+	  
+      <div id="tab2" class="tab-content">
+		<div class="shop-scroll-container">
+        <ul class="text list" id="shopWeaponList">
+        </ul>
+		</div>
+      </div>
+	  
+      <div id="tab3" class="tab-content">
+		<div class="shop-scroll-container">
+        <ul class="text list" id="shopServiceList">
+        </ul>
+	  </div>
+    </div>
+	
+  </div>
+  </div>
+</body>
+</html>

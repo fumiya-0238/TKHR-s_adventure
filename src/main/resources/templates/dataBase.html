@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <div th:fragment="dataBaseContent">
+		<button id = "changeButton" type="button">変更履歴</button>
+      <button id = "upButton" type="button">▲</button>
+      <button id = "downButton" type="button">▼</button>
+      <button id = "deleteButton" type="button">削除</button>
+      <button id = "addButton" type="button">追加</button>
+      <button id = "downloadSQL" type="button">SQLファイルの出力</button>
+      <div id="dataBase-tab-container">
+        <div id="dataBase-tab-menu">
+          <button class="dataBase-tab-button active" onclick="dataBaseOpenTab('monsterDataBase')">モンスター</button>
+          <button class="dataBase-tab-button" onclick="dataBaseOpenTab('actionDataBase')">行動</button>
+          <button class="dataBase-tab-button" onclick="dataBaseOpenTab('conditionDataBase')">状態</button>
+          <button class="dataBase-tab-button" onclick="dataBaseOpenTab('itemDataBase')">アイテム</button>
+          <button class="dataBase-tab-button" onclick="dataBaseOpenTab('weaponDataBase')">武器</button>
+          <button class="dataBase-tab-button" onclick="dataBaseOpenTab('serviceDataBase')">サービス</button>
+        </div>
+        <div id="dataBase-tab-content">
+          <div id="monsterDataBase" class="dataBase-content active">
+            <table class="dataBaseTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>名前</th>
+                  <th>HP</th>
+                  <th>オーバーHP</th>
+                  <th>攻撃力</th>
+                  <th>経験値</th>
+                  <th>お金</th>
+                  <th>ターン</th>
+                  <th>テキスト</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div id="actionDataBase" class="dataBase-content">
+            <table class="dataBaseTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>名前</th>
+                  <th>攻撃bool</th>
+                  <th>テキスト</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div id="conditionDataBase" class="dataBase-content">
+            <table class="dataBaseTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>名前</th>
+                  <th>重ねがけbool</th>
+                  <th>テキスト</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div id="itemDataBase" class="dataBase-content">
+            <table class="dataBaseTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>名前</th>
+                  <th>フリガナ</th>
+                  <th style="white-space:nowrap;">値段</th>
+                  <th>テキスト</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div id="weaponDataBase" class="dataBase-content">
+            <table class="dataBaseTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>名前</th>
+                  <th>フリガナ</th>
+                  <th style="white-space:nowrap;">値段</th>
+                  <th style="white-space:nowrap;">攻撃力</th>
+                  <th>テキスト</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div id="serviceDataBase" class="dataBase-content">
+            <table class="dataBaseTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>名前</th>
+                  <th style="white-space:nowrap;">値段</th>
+                  <th>テキスト</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+    </div>
+	</div>
+	</div>
+  </body>
+</html>

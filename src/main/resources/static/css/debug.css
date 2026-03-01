@@ -1,0 +1,63 @@
+@charset "UTF-8";
+#debug {
+  visibility: hidden;
+  position: absolute;
+}
+#debugRoom{
+	outline: 5px solid green;
+}
+#monwaku{
+	top: 0px;
+	left: 0px;
+	position: absolute;
+}
+#debugDungeons{
+	font-size: 15px;
+	top:0px;
+	color: yellow;
+	position: absolute;
+	width: 640px;
+	height: 480px;
+	position: absolute;
+	overflow: auto;
+}
+#playerSetting{
+	top: 270px;
+	left: 0px;
+}
+
+#sampleMonster{
+	top:1px;
+	left :1px;
+	position: absolute;
+}
+.dungeonList{
+	list-style-type: none;
+}
+
+.floorButton{
+	margin-bottom: 10px;
+	outline: none;
+}
+#debugDungeons::-webkit-scrollbar {
+	    width: 12px; /* スクロールバーの幅 */
+	  }
+
+#debugDungeons::-webkit-scrollbar-track {
+	    background: #f1f1f1; /* トラックの背景色 */
+	    border-radius: 10px;
+	  }
+
+#debugDungeons::-webkit-scrollbar-thumb {
+	    background: #888; /* スクロールバーのつまみの色 */
+	    border-radius: 10px;
+	  }
+
+#debugDungeons::-webkit-scrollbar-thumb:hover {
+	    background: #555; /* ホバー時の色 */
+	  }
+#debugDungeons ul {
+	             padding: 0;
+	             margin: 0;
+	             padding-bottom: 50px; /* リストの下に余白を追加 */
+	         }

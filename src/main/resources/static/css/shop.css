@@ -1,0 +1,180 @@
+@charset "UTF-8";
+
+.tab-container {
+  max-width: 427px;
+}
+
+.tab-menu {
+  display: flex;
+}
+
+.tab-menu button {
+  background: #000000;
+  color: white;
+  font-family: 'MPゴシック';
+  font-weight: bold;
+  border-bottom: 1px solid white;
+  cursor: pointer;
+  font-size: 25px;
+  width: 143px;
+  height: 30px;
+  line-height: 1;
+}
+
+.tab-menu button:hover {
+  background: #505050;
+}
+
+.tab-menu button.active {
+  color: yellow;
+  border-bottom: none;
+}
+
+#shopItemButton,
+#shopWeaponButton {
+  border-right: 1px solid white;
+}
+
+/* タブコンテンツのスタイル */
+.tab-content {
+  display: none;
+  position: absolute;
+  font-size: 21px;
+  padding: 0;
+  margin: 0;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+select {
+  font-size: 20px;
+  font-family: 'MPゴシック';
+  font-weight: bold;
+  border: none;
+  color: yellow;
+  background: #000000;
+  appearance: none;
+  /* ブラウザのデフォルト矢印を非表示 */
+  -webkit-appearance: none;
+  /* Chrome/Safari用 */
+  -moz-appearance: none;
+  /* Firefox用 */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><polygon points="0,0 10,0 5,10" fill="#333"/></svg>');
+  /* カスタム矢印 */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  /* 矢印の位置 */
+  background-size: 10px;
+  /* 矢印のサイズ */
+}
+
+/* ホバー時のスタイル */
+select:hover {
+  background-color: #505050;
+  /* ホバー時の背景色 */
+}
+
+option {
+  background-color: #505050;
+}
+
+#shopInfo {
+  position: absolute;
+}
+
+#sort {
+  display: flex;
+}
+
+.shop-scroll-container {
+  width: 427px;
+  height: 220px;
+  top: 20px;
+  position: absolute;
+  overflow: auto;
+}
+
+.shop-scroll-container::-webkit-scrollbar {
+  width: 12px;
+  /* スクロールバーの幅 */
+}
+
+.shop-scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* トラックの背景色 */
+  border-radius: 10px;
+}
+
+.shop-scroll-container::-webkit-scrollbar-thumb {
+  background: #888;
+  /* スクロールバーのつまみの色 */
+  border-radius: 10px;
+}
+
+.shop-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  /* ホバー時の色 */
+}
+
+.shop-scroll-container ul {
+  list-style-type: none;
+  /* リストマーカーを非表示 */
+  padding-bottom: 50px;
+  /* リストの下に余白を追加 */
+  padding: 0;
+}
+
+#shopItemList,
+#shopWeaponList,
+#shopServiceList {
+  margin: 0;
+
+}
+
+.fixedContent {
+  font-size: 20px;
+  font-family: 'MPゴシック';
+  font-weight: bold;
+}
+
+#shopSort {
+  position: absolute;
+  left: 95px;
+  top: 277px;
+}
+
+#narabikae {
+  position: absolute;
+  color: white;
+  left: 0px;
+  top: 277px;
+  height: 20px;
+}
+
+#cancelFusion {
+  position: absolute;
+  color: yellow;
+  left: 250px;
+  top: 277px;
+  visibility: hidden;
+}
+
+#cancelFusion:hover {
+  outline: 3px solid red;
+}
+
+#nextFloor {
+  position: absolute;
+  color: yellow;
+  left: 303px;
+  top: 277px;
+  width: 120px;
+  height: 20px;
+  line-height: 1;
+}
+
+#nextFloor:hover {
+  outline: 3px solid red;
+}

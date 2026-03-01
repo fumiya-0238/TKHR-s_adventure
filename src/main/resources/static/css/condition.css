@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+.playerConditions {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  color:yellow;
+}
+
+.monsterConditions {
+  position: absolute;
+  top: 0px;
+  left: 200px;
+  color:rgb(255, 255, 0);
+}
+
+.table-container {
+  width: 80%;
+  max-width: 600px;
+  margin-top: 20px;
+  background-color: transparent;
+  /* 背景を透明に */
+}
+.conditionTable{
+	position: absolute;
+	border-collapse: collapse;
+	/* 格子を密着 */
+	border-spacing: 0;
+	/* フォールバックで隙間をゼロに */
+	width: 100%;
+	background-color: #000000;
+	/* 背景を黒に */
+	font-family: 'MPゴシック';
+	/* フォントをMPゴシックに */
+	font-weight: bold;
+	/* 太字 */
+}
+
+.conditionTable th{
+border: 1px solid #ffffff;
+}
+
+.conditionTableBody td {
+  border: 1px solid #ffffff;
+  /* ボーダーを白に変更して視認性向上 */
+  padding: 2px;
+  text-align: center;
+  color: #ffffff;
+  /* 文字を白 */
+}
